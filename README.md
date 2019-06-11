@@ -57,11 +57,39 @@
 
 JDK环境配置好了之后，就可以进行Android Studio(后面简称AS)的安装了。因为后面要涉及到弄一个相对应的安卓手机的App，而AS又是Google官方推荐的IDE。
 
-1. **下载AS并进行安装**
+1. **下载AS和安装**
 
 可以点击链接进行下载，https://developer.android.google.cn/studio/
 或者 http://www.android-studio.org/ （前面的链接因为是google的链接，不可访问可以点击后面的链接下载）。也可以通过百度云下载我上传的AS安装包：https://pan.baidu.com/s/1NDqBK523lE-V7I0uzbJ8qA 提取码：0142。下载完成后，直接双击安装包进行安装即可。至于安装过程如果不用修改目录的话直接Next即可。
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E5%AE%89%E8%A3%85.png?raw=true)
 
-2. **
+2. **AS运行和配置**
+
+第一次启动AS会出现一些设置项。
+
+第一次启动AS后，如果弹出下面界面，这是让你导入配置文件，这是让之前做过安卓开发人员使用的，可以直接导入之前的配置。而这里是第一次使用，所以没有可用的配置文件可以导入，所以选择`Do not import settings`,然后点击<kbd>OK</kbd>。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE1.png?raw=true)
+
+接下来如果弹出如下界面，是AS没有查选到可用的SDK目录，让我们设置代理，以便可以进行下载SDK等相关的文件。这里可以暂时不进行设置，直接选择<kbd>Cancel</kbd>。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE2.png?raw=true)
+
+接下来就会出现一个Welcome界面，直接点击<kbd>Next</kbd>。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE3.png?raw=true)
+
+然后就会出现一个安装类型设置，也就是选择自定义还是按照标准模式来设置和配置AS。这里我选择自定义`Custom`，因为可以更好地去了解和学习相关的配置。然后点击<kbd>Next</kbd>。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE4.png?raw=true)
+
+如果选择了标准模式，也没有关系，这些配置都是可以在AS里面进行修改的。
+
+如果选择自定义模式，下面首先就是要进行UI主题设置，这里我习惯了暗黑主题，所以选择了`Darcula`（根据自己的习惯选择）。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE5.png?raw=true)
+
+接下来这张图片就是SDK的安装。可以修改一下SDK安装的位置，如果后面要安装手机模拟器的镜像这对空间占得还是比较大的。然后其他的默认选择，`Android Virtual Device`就是模拟器镜像，可以选择也可以不选择，后面可以再去安装，我这里先不选择。然后<kbd>Next</kbd>。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE6.png?raw=true)
+
+接下来就是模拟器的设置，默认推荐就可以。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE7.png?raw=true)
+
+最后就直到AS完成这些操作。
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE8.png?raw=true)
