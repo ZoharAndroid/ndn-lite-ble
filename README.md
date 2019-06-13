@@ -237,9 +237,14 @@ nRF5命令行工具包括以下组件：
   <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/NDN-IoTApp%E8%BF%90%E8%A1%8C.png?raw=true" width = "300px"/>
 </p>
 
-NDN-IoT-Android 这个App到这里也就安装完成了，接下来就是对nRF52840开发板进行安装操作了。
+NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可以看利用了ndn-lite这个库，如下图所示，在后面肯定会深入的学习得到，暂时知道这里使用已经使用了。接下来就是对nRF52840开发板进行安装操作了。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-liteApp%E4%BD%BF%E7%94%A8.png?raw=true)
 
 ## 3.3 nRF52840开发板程序
 
+可以参考[ndn-lite-application-for-nRF52840-BLE_version](https://github.com/gujianxiao/ndn-lite-application-for-nRF52840-BLE_version)这个工程（后面简称：nRFProject）。
+
+1. **下载nRFProject
 
 ## 3.4 实现效果
