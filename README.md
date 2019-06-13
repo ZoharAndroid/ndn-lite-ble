@@ -252,7 +252,21 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 
  2. **修改nRFProject中的SDK和ndn-lite路径**
 
-打开下载好的nRFProject，会看到里面有个``
+**前期准备**：
+进行这步操作之前，首先把ndn-lite和nRF52_SDK都下载下来。nRF52_SDK在上面的步骤已经提到过了，应该都下载下来了，直接解压到相应的目录下即可，这里使用的是nRF52_15.2版本。ndn-lite可以通过git命令行输入:`git clone https://github.com/named-data-iot/ndn-lite.git` 进行下载，可以通过百度云盘下载：https://pan.baidu.com/s/1RaXXBooEe9vctBbzjduD1g ，提取码: prrt。
+
+下面就正式开始修改SDK和ndn-lite路径了。
+
+打开下载好的nRFProject，会看到里面有个``ndn_lite_nRF52840_example.emProject``这个文件，然后用文本编辑器打开，我这里用nodepad++打开。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite-nRFProject.png?raw=true)
+
+这里需要修改文件中指定的SDK和ndn-lite的路径，因为我把ndn-lite和nRF52_SDK都放在了nRFProject的上一级目录，所以我把原来文件像这这样的`../../nRF5_SDK_15.2.0_9412b96/xx`和`../../ndn-lite/xx`全都进行修改。
+
+用notepad++可以很方便的进行修改，`Ctrl + F`就可以进行全局的替换。
+<p align = "center">
+  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "400px"/><img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/sdk%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "400px"/>
+</p>
 
 
 
