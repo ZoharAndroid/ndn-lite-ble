@@ -263,10 +263,24 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 
 这里需要修改文件中指定的SDK和ndn-lite的路径，因为我把ndn-lite和nRF52_SDK都放在了nRFProject的上一级目录，所以我把原来文件像这这样的`../../nRF5_SDK_15.2.0_9412b96/xx`和`../../ndn-lite/xx`全都进行修改。
 
-用notepad++可以很方便的进行修改，`Ctrl + F`就可以进行全局的替换。
+用notepad++可以很方便的进行修改，<kbd>Ctrl + F</kbd>就可以进行全局的替换。
 <p align = "center">
-  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "400px"/><img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/sdk%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "400px"/>
+  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "500px"/><img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/sdk%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "500px"/>
 </p>
+
+然后用SES打开这个nRFProject工程。Build编译这个工程，发现弹出密钥认证，如下图所示，因为这是第一次使用SES，之后就不弹出了，当然SES也是免费认证的，所以点击红色框框标出来的进行认证即可。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/SES%E5%AF%86%E9%92%A5.png?raw=true)
+
+然后输入一些信息，邮箱地址请填写正确，之后会SES会把密钥通过邮箱发送给你。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/SES%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81.png?raw=true)
+
+点击<kbd>Request License</kbd>之后，会受到一封邮件，邮件的内容就会包含密钥，然后把密钥复制填写到下图所示中。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E8%BE%93%E5%85%A5%E5%AF%86%E9%92%A5.png?raw=true)
+
+3. **Build编译nRF52**
 
 
 
