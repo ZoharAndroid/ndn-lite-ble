@@ -200,7 +200,22 @@ nRF5命令行工具包括以下组件：
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/Gradle%E6%8F%92%E4%BB%B6%E6%9B%B4%E6%96%B0.png?raw=true)
 
+经过上面的操作，应该是没有再报什么错误了，接下来就是编译运行这个App。
 
+3. **编译运行App**
+
+**前期准备**
+
+* 上网查询一下如何让手机打开**开发者模式**，每个牌子的手机都是不一样的，这里以小米手机为例，`打开设置 -> 我的设备 -> 全部参数 -> 连续点击数次MIUI版本那栏`就可以打开开发者模式。
+* 通过USB连接电脑，并将USB的用途选择`传输文件`。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/USB%E7%94%A8%E9%80%94.png?raw=true)
+
+* 在手机中找到**开发者选项**，打开**USB调试**。具体打开位置以小米手机为例：`打开设置 -> 更多设置 -> 开发者选项 -> USB调试`然后点击确定，之后就会出现一个密钥确认的界面，点击确定，电脑右下角状态栏就会有看到有手机连接了。
+
+<center class="half"> 
+<img width=300 src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/%E6%89%93%E5%BC%80USB%E8%B0%83%E8%AF%95.png?raw=true"/><img  width=300 src="https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/USB%E6%8C%91%E5%90%88%E9%80%82%E5%AF%86%E9%92%A5.png?raw=true"/>
+</center>
 
 ## 3.3 nRF52840开发板程序
 
