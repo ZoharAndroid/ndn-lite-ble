@@ -158,6 +158,51 @@ nRF5命令行工具包括以下组件：
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91.png?raw=true)
 
 
-# 3. 运行ndn-lite
+# 3. 实战体验：一个使用ndn-lite的应用示例
 
-# 4. 运行NDN-IoT-Android
+## 3.1 需求介绍
+
+这是一个应用示例，展示了使用ndn-lite在Android手机和nRF52840开发板之间进行**ndn通信、安全登录和信任策略切换**的基本功能。
+
+具体来说，这个应用程序由两部分组成：**Android手机中的用户应用程序**和**nRF52840开发板中的ndn-lite应用程序**。**用户应用程序**是一个通用的Android应用程序，它在可用设备、基本设备信息和turst策略选项等方面提供用户界面。**ndn-lite应用程序**使用ndn-lite来提供基于ndn的通信、安全登录和信任策略切换功能等。
+
+目前，该应用程序使用BLE作为面在Android手机和开发板之间传输数据包。下面开始这两方面的工作。
+
+## 3.2 Andorid应用程序
+
+具体参考这个[NDN-IoT-Android](https://github.com/gujianxiao/NDN-IoT-Android)库。
+
+**要求**：
+
+* 安卓手机（>= 6.0)
+* 支持蓝牙5.0以上
+
+1. **下载NDN-IoT-Android库**到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。<br/>
+打开git命令行(如果系统中没有安装git工具，可以去Git官网上去下载安装一下，下载地址为：https://git-scm.com/download/win ，也可以直接通过百度云链接下载：https://pan.baidu.com/s/1hkbYz7sJpxxTNbeEXPqOlQ ，提取码: vv7g)，输入`git cloen https://github.com/gujianxiao/NDN-IoT-Android.git`，
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E4%B8%8B%E8%BD%BDNDN-IoT-Android.png?raw=true)
+
+2. **用Android Studio去打开这个Project**。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/AS%E6%89%93%E5%BC%80Project.png?raw=true)
+
+这里需要等待一下，因为AS会通过Gradle来构建这个Project。
+
+在Gradle构建工程之后，如果出现AS提示下面这幅图片的的错误：
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/AS%E6%9E%84%E5%BB%BAProject%E9%97%AE%E9%A2%981.png?raw=true)
+
+这个错误是提示当前我还没有下载对应版本的SDK，这里点击最下面的`Install missing SDK package`进行安装即可，接下来就会出现SDK安装的界面，如下图所示，选择`Accpet`之后，直接<kbd>Next</kbd>即可。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/AS%E6%9E%84%E5%BB%BAProject%E9%97%AE%E9%A2%981%E8%A7%A3%E5%86%B31.png?raw=true)
+
+期间，如果遇到了AS提示下面这图片所示的，是要我们更新一下Gradle插件，直接<kbd>Update</kbd>更新就可以了。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/Gradle%E6%8F%92%E4%BB%B6%E6%9B%B4%E6%96%B0.png?raw=true)
+
+
+
+## 3.3 nRF52840开发板程序
+
+
+## 3.4 实现效果
