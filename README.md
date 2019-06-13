@@ -170,14 +170,14 @@ nRF5命令行工具包括以下组件：
 
 ## 3.2 Andorid应用程序
 
-具体参考这个[NDN-IoT-Android](https://github.com/gujianxiao/NDN-IoT-Android)库。
+具体参考这个[NDN-IoT-Android](https://github.com/gujianxiao/NDN-IoT-Android)库。因为要的用到蓝牙相关的内容，模拟器是无法使用蓝牙功能的，所以建议使用真机来进行测试。
 
 **要求**：
 
 * 安卓手机（>= 6.0)
 * 支持蓝牙5.0以上
 
-1. **下载NDN-IoT-Android库**到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。<br/>
+1. **下载NDN-IoT-Android库**到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。可以通过百度云进行下载：https://pan.baidu.com/s/1Kx9c-xPQ5TTQccOz4DFzTQ ，提取码: fgsj。<br/>
 打开git命令行(如果系统中没有安装git工具，可以去Git官网上去下载安装一下，下载地址为：https://git-scm.com/download/win ，也可以直接通过百度云链接下载：https://pan.baidu.com/s/1hkbYz7sJpxxTNbeEXPqOlQ ，提取码: vv7g)，输入`git cloen https://github.com/gujianxiao/NDN-IoT-Android.git`，
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E4%B8%8B%E8%BD%BDNDN-IoT-Android.png?raw=true)
@@ -213,12 +213,31 @@ nRF5命令行工具包括以下组件：
   <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/USB%E7%94%A8%E9%80%94.png?raw=true" width = "300px" />
 </p>
 
-* 在手机中找到**开发者选项**，打开**USB调试**。具体打开位置以小米手机为例：`打开设置 -> 更多设置 -> 开发者选项 -> USB调试`然后点击确定，之后就会出现一个密钥确认的界面，点击确定，电脑右下角状态栏就会有看到有手机连接了。
+* 在手机中找到**开发者选项**，打开**USB调试**。具体打开位置以小米手机为例：`打开设置 -> 更多设置 -> 开发者选项 -> USB调试`然后点击打开（如左图所示），之后就会出现一个密钥确认的界面（如右图所示），点击确定，电脑右下角状态栏就会有看到有手机连接了。
 
 <p align="center"> 
-<img width="300px" src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/%E6%89%93%E5%BC%80USB%E8%B0%83%E8%AF%95.png?raw=true"/>
-<img  width="300px" src="https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/USB%E6%8C%91%E5%90%88%E9%80%82%E5%AF%86%E9%92%A5.png?raw=true"/>
+<img width="300px" src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/%E6%89%93%E5%BC%80USB%E8%B0%83%E8%AF%95.png?raw=true"/><img width="300px" src="https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/USB%E6%8C%91%E5%90%88%E9%80%82%E5%AF%86%E9%92%A5.png?raw=true"/>
 </p>
+
+进过上面的前期准备，手机应该连接上了电脑了，下面开始正式通过AS编译安装App啦！
+
+点击所下图所示的 Run app “斜三角”图标（图片所示的“锤子”图标是编译工程，但不会直接对手机安装app，点击“斜三角”图标就可以编译完了直接安装应用到手机上了），就会弹出一个选择安装app的手机列表，然后选择<kbd>OK</kbd>即可。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E7%BC%96%E8%AF%91App.png?raw=true)
+
+接下来AS就会对NDN-IoT-Android这个工程进行编译。编译完成之后，手机会弹出一个对话框让你进行选择是否安装这个App，直接点击<kbd>继续安装</kbd>进行安装。
+
+<p align="center">
+  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/app%E5%AE%89%E8%A3%85.png?raw=true" width = "300px"/>
+</p>
+
+手机自动安装完这个app之后默认会直接打开这个app，给与相应的权限之后，发现App会直接闪退。**那是因为手机蓝牙没有开启**。开启手机蓝牙之后，App运行的界面如下图
+
+<p align = "center">
+  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/NDN-IoTApp%E8%BF%90%E8%A1%8C.png?raw=true" width = "300px"/>
+</p>
+
+NDN-IoT-Android 这个App到这里也就安装完成了，接下来就是对nRF52840开发板进行安装操作了。
 
 ## 3.3 nRF52840开发板程序
 
