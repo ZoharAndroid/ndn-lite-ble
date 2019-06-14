@@ -1,26 +1,6 @@
 <h1>NDN-Lite-BLE操作参考指南</h1>
   
-* [1. 初识ndn-lite](#1-初识ndn-lite )
-* [2. 前期准备：开发环境的搭建](#2-前期准备开发环境的搭建 )
-	* [2.1 JDK和JRE的安装](#21-jdk和jre的安装 )
-	* [2.2 Android Studio的安装配置](#22-android-studio的安装配置 )
-	* [2.3 Segger安装和配置](#23-segger安装和配置 )
-* [3. 实战体验：一个使用ndn-lite的应用示例](#3-实战体验一个使用ndn-lite的应用示例 )
-	* [3.1 需求介绍](#31-需求介绍 )
-	* [3.2 Andorid应用程序](#32-andorid应用程序 )
-		* [3.2.1 下载NDN-IoT-Android库](#321-下载ndn-iot-android库 )
-		* [3.2.2 用Android Studio去打开这个Project](#322-用android-studio去打开这个project )
-		* [3.2.3 编译运行App](#323-编译运行app )
-	* [3.3 nRF52840开发板程序](#33-nrf52840开发板程序 )
-		* [3.3.1 下载nRFProject到本地](#331-下载nrfproject到本地 )
-		* [3.3.3 Build编译nRF52Project](#333-build编译nrf52project )
-			* [找不到micro_ecc_lib_nrf52.a文件？](#找不到micro_ecc_lib_nrf52a文件 )
-	* [3.4 实现效果](#34-实现效果 )
-		* [3.4.1 将nRFProject分别烧录到nRF52840板](#341-将nrfproject分别烧录到nrf52840板 )
-			* [烧录第一块板子](#烧录第一块板子 )
-			* [烧录第二块板子](#烧录第二块板子 )
-		* [3.4.2 显示效果](#342-显示效果 )
-* [4. ndn-lite使用](#4-ndn-lite使用 )
+[toc]
   
 # 1. 初识ndn-lite
   
@@ -395,4 +375,6 @@ SES输出的提示：
 3. 可以按按钮1去关闭LED1，或者去按按钮2去关闭LED1（观看效果请点击： https://pan.baidu.com/s/1eaRquGcrgWCtaNMREXk_qg ，提取码: 8bpv）。
 4. 如果有两块板子你可以按按钮3去发送命令兴趣包去打开另一块板子的LED1（观看效果请点击：https://pan.baidu.com/s/1AStjhpMK9p4QUcxqMXGQUQ ，提取码: 6n9p）。
   
-# 4. ndn-lite使用
+# 4. ndn-lite学习与使用
+
+## 4.1 （TODO）
