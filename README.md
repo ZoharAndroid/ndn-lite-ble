@@ -2,9 +2,9 @@
   
 * [1. 初识ndn-lite](#1-初识ndn-lite )
 * [2. 前期准备：开发环境的搭建](#2-前期准备开发环境的搭建 )
-		* [2.1 JDK和JRE的安装](#21-jdk和jre的安装 )
-		* [2.2 Android Studio的安装配置](#22-android-studio的安装配置 )
-		* [2.3 Segger安装和配置](#23-segger安装和配置 )
+	* [2.1 JDK和JRE的安装](#21-jdk和jre的安装 )
+	* [2.2 Android Studio的安装配置](#22-android-studio的安装配置 )
+	* [2.3 Segger安装和配置](#23-segger安装和配置 )
 * [3. 实战体验：一个使用ndn-lite的应用示例](#3-实战体验一个使用ndn-lite的应用示例 )
 	* [3.1 需求介绍](#31-需求介绍 )
 	* [3.2 Andorid应用程序](#32-andorid应用程序 )
