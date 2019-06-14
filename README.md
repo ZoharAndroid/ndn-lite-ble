@@ -1,8 +1,39 @@
 <h1>NDN-Lite-BLE操作参考指南</h1>
   
-[toc]
+* [1. 初识ndn-lite](#1-初识ndn-lite )
+* [2. 前期准备：开发环境的搭建](#2-前期准备开发环境的搭建 )
+	* [2.1 JDK和JRE的安装](#21-jdk和jre的安装 )
+		* [2.1.1 下载JDK](#211-下载jdk )
+		* [2.1.2 设置环境变量](#212-设置环境变量 )
+	* [2.2 Android Studio的安装配置](#22-android-studio的安装配置 )
+		* [2.2.1 下载AS和安装](#221-下载as和安装 )
+		* [2.2.2 AS运行和配置](#222-as运行和配置 )
+	* [2.3 Segger安装和配置](#23-segger安装和配置 )
+		* [2.3.1 下载和安装SES](#231-下载和安装ses )
+		* [2.3.2 下载nRF5_SDK](#232-下载nrf5_sdk )
+		* [2.3.3 下载nRF5命令行工具](#233-下载nrf5命令行工具 )
+		* [2.3.4 测试是否成功](#234-测试是否成功 )
+* [3. 实战体验：一个使用ndn-lite的应用示例](#3-实战体验一个使用ndn-lite的应用示例 )
+	* [3.1 需求介绍](#31-需求介绍 )
+	* [3.2 Andorid应用程序](#32-andorid应用程序 )
+		* [3.2.1 下载NDN-IoT-Android库](#321-下载ndn-iot-android库 )
+		* [3.2.2 用Android Studio去打开这个Project](#322-用android-studio去打开这个project )
+		* [3.2.3 编译运行App](#323-编译运行app )
+	* [3.3 nRF52840开发板程序](#33-nrf52840开发板程序 )
+		* [3.3.1 下载nRFProject到本地](#331-下载nrfproject到本地 )
+		* [3.3.2 修改nRFProject中的SDK和ndn-lite路径](#332-修改nrfproject中的sdk和ndn-lite路径 )
+		* [3.3.3 Build编译nRF52Project](#333-build编译nrf52project )
+			* [找不到micro_ecc_lib_nrf52.a文件？](#找不到micro_ecc_lib_nrf52a文件 )
+	* [3.4 实现效果](#34-实现效果 )
+		* [3.4.1 将nRFProject分别烧录到nRF52840板](#341-将nrfproject分别烧录到nrf52840板 )
+			* [烧录第一块板子](#烧录第一块板子 )
+			* [烧录第二块板子](#烧录第二块板子 )
+		* [3.4.2 显示效果](#342-显示效果 )
+* [4. ndn-lite学习与使用](#4-ndn-lite学习与使用 )
+	* [4.1 （TODO）](#41-todo )
   
 # 1. 初识ndn-lite
+  
   
   
 [NDN-Lite](https://github.com/named-data-iot/ndn-lite )库实现了命名数据网络(NDN)栈。该库是用标准C编写的，需要最低版本的C11（ISO/IEC 9899:2011）。ndn-lite仓库地址：https://github.com/named-data-iot/ndn-lite
@@ -21,13 +52,16 @@
   
 # 2. 前期准备：开发环境的搭建
   
+  
 这部分内容主要是讲解一些有关开发环境的搭建，包括：JDK/JRE的安装、Android Studio的安装配置、Segger的安装配置等内容。开发环境的搭建都是**基于Windows10操作系统(64位)**上进行的。
   
 这篇操作参考指南的目的就是让自己从零开始，按照操作指南一步一步的走下去以实现相同的效果。如果之前做过Java开发，想必JDK/JRE都已经在系统上安装配置好了，这一步骤就可以省略了。如果之前用Android Studio写过安卓App，那么JDK/JRE安装和Android Studio安装配置都可以跳过不用看了。
   
 ## 2.1 JDK和JRE的安装
   
+  
 ### 2.1.1 下载JDK
+  
   
 JDK版本为8u211，可以直接打开这个链接下载对应版本的JDK(如下图)：https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
   
@@ -38,6 +72,7 @@ JDK版本为8u211，可以直接打开这个链接下载对应版本的JDK(如�
 下载后直接双击选择安装目录即可。
   
 ### 2.1.2 设置环境变量
+  
   
 * 新建环境变量，变量名称为`JAVA_HOME`，变量值就是你安装JDK的目录地址。如下图所示。
   
@@ -53,9 +88,11 @@ JDK版本为8u211，可以直接打开这个链接下载对应版本的JDK(如�
   
 ## 2.2 Android Studio的安装配置
   
+  
 JDK环境配置好了之后，就可以进行Android Studio(后面简称AS)的安装了。因为后面要涉及到弄一个相对应的安卓手机的App，而AS又是Google官方推荐的IDE。
   
 ### 2.2.1 下载AS和安装
+  
   
 可以点击链接进行下载，https://developer.android.google.cn/studio/
 或者 http://www.android-studio.org/ （前面的链接因为是google的链接，不可访问可以点击后面的链接下载）。也可以通过百度云下载我上传的AS安装包：https://pan.baidu.com/s/1NDqBK523lE-V7I0uzbJ8qA 提取码：0142。下载完成后，直接双击安装包进行安装即可。至于安装过程如果不用修改目录的话直接<kbd>Next</kbd>即可。
@@ -63,6 +100,7 @@ JDK环境配置好了之后，就可以进行Android Studio(后面简称AS)的�
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E5%AE%89%E8%A3%85.png?raw=true )
   
 ### 2.2.2 AS运行和配置
+  
   
 第一次启动AS会出现一些设置项。
   
@@ -101,7 +139,8 @@ JDK环境配置好了之后，就可以进行Android Studio(后面简称AS)的�
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-11/AS%E9%85%8D%E7%BD%AE8.png?raw=true )
   
 ## 2.3 Segger安装和配置
-
+  
+  
 在开发之前，必须安装一些所需的软件。这些软件包括：连接到开发板的工具(J-Link等)、用于开发应用程序的IDE（Segger Embedded Studio等），以及提供库和示例应用程序的nRF5 SDK。
   
 Segger Embedded Studio（简称:SES）是Nordic公司推荐的IDE，全平台（Windows、Linux和MacOS）都支持。因为后面要涉及到nRF52840这块板子进行开发，所以SES安装也就必不可少。如果之前有用户习惯用Keil去开发嵌入式相关的内容，nRF52840当然也支持用Keil去开发，具体可以去参考这篇文件：[nRF5 Series: Developing on Windows with ARM Keil MDK](https://pan.baidu.com/s/1bRtmcxUn32ZzAhf7NhB84g ), 
@@ -109,11 +148,13 @@ Segger Embedded Studio（简称:SES）是Nordic公司推荐的IDE，全平台（
   
 ### 2.3.1 下载和安装SES
   
+  
 点击这个链接：https://www.segger.com/downloads/embedded-studio  ，也可以直接通过百度云去下载我上传的资源：https://pan.baidu.com/s/16KimethzWKN2xYyu1IbnSw ，提取码：rmb9（官网上下载速度比较慢，建议通过百度云去下载）。
   
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/SEEGER%E5%AE%89%E8%A3%85.png?raw=true )
   
 ### 2.3.2 下载nRF5_SDK
+  
   
 选择对应的nRF5_SDK版本进行下载下载链接为：https://developer.nordicsemi.com/nRF5_SDK/nRF5_SDK_v15.x.x/ ，也可以直接通过百度云去下载我上传的资源，
   
@@ -129,6 +170,7 @@ Segger Embedded Studio（简称:SES）是Nordic公司推荐的IDE，全平台（
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/nRF5SDK%E4%B8%8B%E8%BD%BD.png?raw=true )
   
 ### 2.3.3 下载nRF5命令行工具
+  
   
 nRF5命令行工具用于Nordic Semiconductor的nRF51和nRF52系列SoC的开发、编程和调试。
   
@@ -153,14 +195,17 @@ nRF5命令行工具包括以下组件：
   
 ### 2.3.4 测试是否成功
   
+  
 通过上面的一些安装操作，接下来就把板子通过数据线与电脑USB口相连，看电脑是否提示J-Link连接了。
   
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-12/%E8%BF%9E%E6%8E%A5%E7%94%B5%E8%84%91.png?raw=true )
-
+  
 # 3. 实战体验：一个使用ndn-lite的应用示例
-
+  
+  
 ## 3.1 需求介绍
-
+  
+  
 这是一个应用示例，展示了使用ndn-lite在Android手机和nRF52840开发板之间进行**ndn通信、安全登录和信任策略切换**的基本功能。
   
 具体来说，这个应用程序由两部分组成：**Android手机中的用户应用程序**和**nRF52840开发板中的ndn-lite应用程序**。**用户应用程序**是一个通用的Android应用程序，它在可用设备、基本设备信息和turst策略选项等方面提供用户界面。**ndn-lite应用程序**使用ndn-lite来提供基于ndn的通信、安全登录和信任策略切换功能等。
@@ -168,6 +213,7 @@ nRF5命令行工具包括以下组件：
 目前，该应用程序使用BLE作为面在Android手机和开发板之间传输数据包。下面开始这两方面的工作。
   
 ## 3.2 Andorid应用程序
+  
   
   
 具体参考这个[NDN-IoT-Android](https://github.com/gujianxiao/NDN-IoT-Android )库。因为要的用到蓝牙相关的内容，模拟器是无法使用蓝牙功能的，所以建议使用真机来进行测试。
@@ -180,12 +226,14 @@ nRF5命令行工具包括以下组件：
 ### 3.2.1 下载NDN-IoT-Android库
   
   
+  
 下载NDN-IoT-Android到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。可以通过百度云进行下载：https://pan.baidu.com/s/1Kx9c-xPQ5TTQccOz4DFzTQ ，提取码: fgsj。<br/>
 打开git命令行(如果系统中没有安装git工具，可以去Git官网上去下载安装一下，下载地址为：https://git-scm.com/download/win ，也可以直接通过百度云链接下载：https://pan.baidu.com/s/1hkbYz7sJpxxTNbeEXPqOlQ ，提取码: vv7g)，输入`git cloen https://github.com/gujianxiao/NDN-IoT-Android.git`，
   
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E4%B8%8B%E8%BD%BDNDN-IoT-Android.png?raw=true )
   
 ### 3.2.2 用Android Studio去打开这个Project
+  
   
   
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/AS%E6%89%93%E5%BC%80Project.png?raw=true )
@@ -207,7 +255,8 @@ nRF5命令行工具包括以下组件：
 经过上面的操作，应该是没有再报什么错误了，接下来就是编译运行这个App。
   
 ### 3.2.3 编译运行App
-
+  
+  
 **前期准备**
   
 * 上网查询一下如何让手机打开**开发者模式**，每个牌子的手机都是不一样的，这里以小米手机为例，`打开设置 -> 我的设备 -> 全部参数 -> 连续点击数次MIUI版本那栏`就可以打开开发者模式。
@@ -246,14 +295,17 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-liteApp%E4%BD%BF%E7%94%A8.png?raw=true )
   
 ## 3.3 nRF52840开发板程序
-
+  
+  
 ### 3.3.1 下载nRFProject到本地
+  
   
  nRFProject工程链接地址为：链接: https://pan.baidu.com/s/1L9qydUhBlRB3ffUdknuFXw ，提取码: 3eqf。
   
  ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/nRF%E4%B8%8B%E8%BD%BD.png?raw=true )
   
 ### 3.3.2 修改nRFProject中的SDK和ndn-lite路径
+  
   
 **前期准备**：
 进行这步操作之前，首先把ndn-lite和nRF52_SDK都下载下来。nRF52_SDK在上面的步骤已经提到过了，应该都下载下来了，直接解压到相应的目录下即可，这里使用的是nRF52_15.2版本。ndn-lite可以通过百度云盘下载：https://pan.baidu.com/s/1oyFMxZOIcBiuDoOedUSROQ ,提取码: 7ny9。
@@ -286,11 +338,13 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E8%BE%93%E5%85%A5%E5%AF%86%E9%92%A5.png?raw=true )
   
 ### 3.3.3 Build编译nRF52Project
-
+  
+  
 点击SES的<kbd>Build</kbd>进行编译。下面说明我在编译的时候遇到的一些问题。
   
 #### 找不到micro_ecc_lib_nrf52.a文件？
-
+  
+  
 （1）**问题描述**：
   
 SES输出的提示：
@@ -343,12 +397,15 @@ SES输出的提示：
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E7%BC%96%E8%AF%91%E6%88%90%E5%8A%9F.png?raw=true )
   
 ## 3.4 实现效果
-
+  
+  
 对于演示效果，这里需要用到两块nRF52840板子。
   
 ### 3.4.1 将nRFProject分别烧录到nRF52840板
-
+  
+  
 #### 烧录第一块板子
+  
   
 先将nRFProject烧录第一块nRF52840板子中。
   
@@ -361,7 +418,8 @@ SES输出的提示：
 ![download下载](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/download%E4%B8%8B%E8%BD%BD.png?raw=true )
   
 #### 烧录第二块板子
-
+  
+  
 * 在SES中工程结构目录中，找到`hardcode-experimentation.h`文件，将`#define BOARD_1`注释掉，然后将`#define BOARD_2`取消注释。如下图所示。
   
 ![修改代码](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png?raw=true )
@@ -369,12 +427,16 @@ SES输出的提示：
 然后Build -> PC连接第二块板子 -> J-Link Conncet -> 重新烧录到第二块板子,这些步骤都和上面提到过的烧录第一块板子一样的，不再赘述。
   
 ### 3.4.2 显示效果
-
+  
+  
 1. 板子一上电，LED3就会闪烁3次，这表示的板子正在进行初始化相关的工作（观看效果请点击：https://pan.baidu.com/s/1jIuPspph3ZCYO6Yovnrb7Q ，提取码: a9ib，如果显示“正在转码。。。”，刷新一下网页就可以看了）。
 2. 第二次闪烁，表示的是设备在手机上已经完成了安全的sign-on（观看效果请点击：链接: https://pan.baidu.com/s/1BNagCaJn8NByoqaW_86GpA 提取码: 2t96）。
 3. 可以按按钮1去关闭LED1，或者去按按钮2去关闭LED1（观看效果请点击： https://pan.baidu.com/s/1eaRquGcrgWCtaNMREXk_qg ，提取码: 8bpv）。
 4. 如果有两块板子你可以按按钮3去发送命令兴趣包去打开另一块板子的LED1（观看效果请点击：https://pan.baidu.com/s/1AStjhpMK9p4QUcxqMXGQUQ ，提取码: 6n9p）。
   
 # 4. ndn-lite学习与使用
-
+  
+  
 ## 4.1 （TODO）
+  
+  
