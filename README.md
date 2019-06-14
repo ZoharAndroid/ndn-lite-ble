@@ -177,12 +177,14 @@ nRF5命令行工具包括以下组件：
 * 安卓手机（>= 6.0)
 * 支持蓝牙5.0以上
 
-1. **下载NDN-IoT-Android库**到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。可以通过百度云进行下载：https://pan.baidu.com/s/1Kx9c-xPQ5TTQccOz4DFzTQ ，提取码: fgsj。<br/>
+### 3.2.1 下载NDN-IoT-Android库
+
+下载NDN-IoT-Android到自己的电脑中，下载链接为：https://github.com/gujianxiao/NDN-IoT-Android.git 。可以通过百度云进行下载：https://pan.baidu.com/s/1Kx9c-xPQ5TTQccOz4DFzTQ ，提取码: fgsj。<br/>
 打开git命令行(如果系统中没有安装git工具，可以去Git官网上去下载安装一下，下载地址为：https://git-scm.com/download/win ，也可以直接通过百度云链接下载：https://pan.baidu.com/s/1hkbYz7sJpxxTNbeEXPqOlQ ，提取码: vv7g)，输入`git cloen https://github.com/gujianxiao/NDN-IoT-Android.git`，
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E4%B8%8B%E8%BD%BDNDN-IoT-Android.png?raw=true)
 
-2. **用Android Studio去打开这个Project**。
+### 3.2.2 用Android Studio去打开这个Project
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/AS%E6%89%93%E5%BC%80Project.png?raw=true)
 
@@ -202,7 +204,7 @@ nRF5命令行工具包括以下组件：
 
 经过上面的操作，应该是没有再报什么错误了，接下来就是编译运行这个App。
 
-3. **编译运行App**
+### 3.2.3 编译运行App
 
 **前期准备**
 
@@ -243,17 +245,15 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 
 ## 3.3 nRF52840开发板程序
 
-可以参考[ndn-lite-application-for-nRF52840-BLE_version](https://github.com/gujianxiao/ndn-lite-application-for-nRF52840-BLE_version)这个工程（后面简称：nRFProject）。
-
-1. **下载nRFProject到本地**
- nRFProject工程链接地址为：https://github.com/gujianxiao/ndn-lite-application-for-nRF52840-BLE_version.git ，通过git命令行输入`https://github.com/gujianxiao/ndn-lite-application-for-nRF52840-BLE_version.git`下载该工程到相应的目录下。也可以通过百度云下载：https://pan.baidu.com/s/1F-SrXk19P1R3HcveFcmj2Q ，提取码: 3ppt。
+### 3.3.1 下载nRFProject到本地
+ nRFProject工程链接地址为：链接: https://pan.baidu.com/s/1L9qydUhBlRB3ffUdknuFXw ，提取码: 3eqf。
 
  ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/nRF%E4%B8%8B%E8%BD%BD.png?raw=true)
 
- 2. **修改nRFProject中的SDK和ndn-lite路径**
+ ### 3.3.2 修改nRFProject中的SDK和ndn-lite路径
 
 **前期准备**：
-进行这步操作之前，首先把ndn-lite和nRF52_SDK都下载下来。nRF52_SDK在上面的步骤已经提到过了，应该都下载下来了，直接解压到相应的目录下即可，这里使用的是nRF52_15.2版本。ndn-lite可以通过git命令行输入:`git clone https://github.com/named-data-iot/ndn-lite.git` 进行下载，可以通过百度云盘下载：https://pan.baidu.com/s/1RaXXBooEe9vctBbzjduD1g ，提取码: prrt。
+进行这步操作之前，首先把ndn-lite和nRF52_SDK都下载下来。nRF52_SDK在上面的步骤已经提到过了，应该都下载下来了，直接解压到相应的目录下即可，这里使用的是nRF52_15.2版本。ndn-lite可以通过百度云盘下载：https://pan.baidu.com/s/1oyFMxZOIcBiuDoOedUSROQ ,提取码: 7ny9。
 
 下面就正式开始修改SDK和ndn-lite路径了。
 
@@ -263,25 +263,105 @@ NDN-IoT-Android 这个App到这里也就安装完成了，从这个源代码可�
 
 这里需要修改文件中指定的SDK和ndn-lite的路径，因为我把ndn-lite和nRF52_SDK都放在了nRFProject的上一级目录，所以我把原来文件像这这样的`../../nRF5_SDK_15.2.0_9412b96/xx`和`../../ndn-lite/xx`全都进行修改。
 
-用notepad++可以很方便的进行修改，<kbd>Ctrl + F</kbd>就可以进行全局的替换。
-<p align = "center">
-  <img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "500px"/><img src = "https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/sdk%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true" width = "500px"/>
-</p>
+用notepad++可以很方便的进行修改，<kbd>Ctrl + F</kbd>就可以进行全局的替换。下面两幅图片就是notepad++修改sdk和ndn-lite路径的图片。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/ndn-lite%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true)
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/sdk%E8%B7%AF%E5%BE%84%E4%BF%AE%E6%94%B9.png?raw=true)
+
 
 然后用SES打开这个nRFProject工程。Build编译这个工程，发现弹出密钥认证，如下图所示，因为这是第一次使用SES，之后就不弹出了，当然SES也是免费认证的，所以点击红色框框标出来的进行认证即可。
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/SES%E5%AF%86%E9%92%A5.png?raw=true)
 
-然后输入一些信息，邮箱地址请填写正确，之后会SES会把密钥通过邮箱发送给你。
+然后输入一些信息，邮箱地址请填写正确，之后SES会把密钥通过邮箱发送给你。
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/SES%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81.png?raw=true)
 
-点击<kbd>Request License</kbd>之后，会受到一封邮件，邮件的内容就会包含密钥，然后把密钥复制填写到下图所示中。
+点击<kbd>Request License</kbd>之后，会收到一封邮件，邮件的内容就会包含密钥，然后把密钥复制填写到下图所示中。
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-13/%E8%BE%93%E5%85%A5%E5%AF%86%E9%92%A5.png?raw=true)
 
-3. **Build编译nRF52**
+### 3.3.3 Build编译nRF52Project
 
+点击SES的<kbd>Build</kbd>进行编译。下面说明我在编译的时候遇到的一些问题。
 
+####  找不到micro_ecc_lib_nrf52.a文件？
+   
+（1）**问题描述**：
+  
+SES输出的提示：
+`cannot find ../nRF5_SDK_15.2.0_9412b96/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a: No such file or directory`：也就是提示找不到micro_ecc_lib_nrf52.a这个文件。显示如下图所示。
+
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/%E9%97%AE%E9%A2%981.png)
+
+（2）**解决办法和步骤**：
+
+**A. 在Windows下安装gcc**，这里需要下载[MinGW](https://mirrors.xtom.com.hk/osdn//mingw/68260/mingw-get-setup.exe)，下载地址为：https://mirrors.xtom.com.hk/osdn//mingw/68260/mingw-get-setup.exe 。百度云下载地址为：https://pan.baidu.com/s/1BrSoJ_-XgXHox3OK97S9Hw ，提取码: y4rq。
+
+把有关gcc以及make相关的大部分都进行标记安装一下。注意要将MinGW加入环境变量，如下图所示。先创建一个MinGW的变量，然后在Path中进行添加。
+
+![添加WinGW到环境变量中](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E6%B7%BB%E5%8A%A0MinGW%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.png?raw=true)
+
+这里在安装make的时候，发现MinGW中找不到对应的make包，所以，可以通过`mingw-get install mingw32-make`来安装，如下图所示，这里也就是为什么要把WinGW添加到系统环境变量，如果不添加到系统环境变量之中，会提示该命令找不到。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/make%E5%AE%89%E8%A3%85.png?raw=true)
+
+**B. 下载交叉编译工具**，一开始系统是没有装这个交叉编译工具的，所以需要单独安装这个交叉编译工具。下载地址：https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads 。百度云下载的地址为：https://pan.baidu.com/s/1WDjKX8mX-sNRoZXSPtRJJw ，提取码: 4wxj。
+
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7.png)
+
+选择Windows下的版本进行安装，建议安装到电脑的默认位置，最后完成的时候建议选择添加到环境变量。
+
+**C. 修改配置文件**。找到nRF52840 SDK中的gcc配置文件，并进行修改。具体配置路径为：`\nRF5_SDK_15.2.0_9412b96\components\toolchain\gcc`
+ 
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE.png)
+
+在该路径下，打开文件为：`Makefile.windows`，修改内容如下图（具体的修改按照下载的交叉编译工具的具体版本和路径来修改）
+
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.png)
+
+**D. 打开终端，找到nRFSDK的armgcc位置**，具体位置如：`xx\nRF5_SDK_15.2.0_9412b96\external\micro-ecc\nrf52hf_armgcc\armgcc`，然后`mingw32-make`去make一下。
+
+如果发现报错了，如下图，根据提示是`\mirco-ecc`目录下缺少文件，把文件放到`\micro-ecc`目录下，这个文件下载地址为：https://pan.baidu.com/s/1vj5EaRtg4X-qAsh4meuWdw ，提取码: wfcz。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/mingw-32%20make%E9%94%99%E8%AF%AF.png?raw=true)
+
+下面这幅图片就是我添加文件之后的nRF52_SDK的文件夹：
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/micro-ecc%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE.png?raw=true)
+
+当然如果没有报这个错误，那么就不用管了，应该就直接显示编译成功了，会生成SES提示缺失的那个`micro_ecc_lib_nrf52.a`文件了。
+
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-2-28/make%E7%BB%93%E6%9E%9C.png)
+
+**E. 编译成功**
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E7%BC%96%E8%AF%91%E6%88%90%E5%8A%9F.png?raw=true)
 
 ## 3.4 实现效果
+
+对于演示效果，这里需要用到两块nRF52840板子。
+
+### 3.4.1 将nRFProject分别烧录到nRF52840板
+
+#### 烧录第一块板子
+先将nRFProject烧录第一块nRF52840板子中。
+
+在SES软件中，先Build编译一下nRFProject（这一步骤在3.3.3节已经提过了）。编译完后，选择`Target -> Connect J-Link`，如下图所示，这里是通过J-Link将板子与电脑相连。
+
+![J-Link连接](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/J-Link%E8%BF%9E%E6%8E%A5.png?raw=true)
+
+然后把nRPject下载到板子中，选择`Target -> Download xx`，如下图所示。
+
+![download下载](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/download%E4%B8%8B%E8%BD%BD.png?raw=true)
+
+#### 烧录第二块板子
+
+* 在SES中工程结构目录中，找到`hardcode-experimentation.h`文件，将`#define BOARD_1`注释掉，然后将`#define BOARD_2`取消注释。如下图所示。
+
+![修改代码](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png?raw=true)
+
+然后Build -> PC连接第二块板子 -> J-Link Conncet -> 重新烧录到第二块板子,这些步骤都和上面提到过的烧录第一块板子一样的，不再赘述。
+
+### 3.4.2 显示效果
