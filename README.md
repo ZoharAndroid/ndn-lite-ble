@@ -365,3 +365,10 @@ SES输出的提示：
 然后Build -> PC连接第二块板子 -> J-Link Conncet -> 重新烧录到第二块板子,这些步骤都和上面提到过的烧录第一块板子一样的，不再赘述。
 
 ### 3.4.2 显示效果
+
+1. 板子一上电，LED3就会闪烁3次，这表示的板子正在进行初始化相关的工作（观看效果请点击：https://pan.baidu.com/s/1jIuPspph3ZCYO6Yovnrb7Q ，提取码: a9ib）。
+2. 第二次闪烁，表示的是设备在手机上已经完成了安全的sign-on（观看效果请点击：链接: https://pan.baidu.com/s/1BNagCaJn8NByoqaW_86GpA 提取码: 2t96）。
+3. 可以按按钮1去关闭LED1，或者去按按钮2去关闭LED1（观看效果请点击： https://pan.baidu.com/s/1eaRquGcrgWCtaNMREXk_qg ，提取码: 8bpv）。
+4. 如果有两块板子你可以按按钮3去发送命令兴趣包去打开另一块板子的LED1（观看效果请点击：https://pan.baidu.com/s/1AStjhpMK9p4QUcxqMXGQUQ ，提取码: 6n9p）。
+
+# 4. ndn-lite使用
