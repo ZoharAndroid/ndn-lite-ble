@@ -367,8 +367,7 @@ SES输出的提示：
 ![download下载](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/download%E4%B8%8B%E8%BD%BD.png?raw=true )
   
 #### 烧录第二块板子
-  
-  
+
 * 在SES中工程结构目录中，找到`hardcode-experimentation.h`文件，将`#define BOARD_1`注释掉，然后将`#define BOARD_2`取消注释。如下图所示。
   
 ![修改代码](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-14/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81.png?raw=true )
@@ -383,8 +382,18 @@ SES输出的提示：
 4. 如果有两块板子你可以按按钮3去发送命令兴趣包去打开另一块板子的LED1（观看效果请点击：https://pan.baidu.com/s/1AStjhpMK9p4QUcxqMXGQUQ ，提取码: 6n9p）。
   
 # 4. ndn-lite学习与使用
+
+这部分将会深入去学习ndn-lite相关的内容，对使用ndn-lite打下基础。
+
+## 4.1 ndn-lite体系结构
   
-  
-## 4.1 （TODO）
-  
+ndn-lite的详细介绍请见：https://github.com/named-data-iot/ndn-lite/wiki 。ndn-lite库旨在提供多个核心NDN网络栈。该库允许应用程序直接有访问控制、服务发现、模式化信任等功能。
+
+ndn-lite系统结构图如下：
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/iot-framework.jpg?raw=true)
+
+## 4.2 ndn-lite库的代码结构
+
+
   
