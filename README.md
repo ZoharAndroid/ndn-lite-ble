@@ -1,6 +1,42 @@
 <h1>NDN-Lite-BLE操作参考指南</h1>
   
-[toc]
+<!-- TOC -->
+
+- [1. 初识ndn-lite](#1-%E5%88%9D%E8%AF%86ndn-lite)
+- [2. 前期准备：开发环境的搭建](#2-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA)
+  - [2.1 JDK和JRE的安装](#21-JDK%E5%92%8CJRE%E7%9A%84%E5%AE%89%E8%A3%85)
+    - [2.1.1 下载JDK](#211-%E4%B8%8B%E8%BD%BDJDK)
+    - [2.1.2 设置环境变量](#212-%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
+  - [2.2 Android Studio的安装配置](#22-Android-Studio%E7%9A%84%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE)
+    - [2.2.1 下载AS和安装](#221-%E4%B8%8B%E8%BD%BDAS%E5%92%8C%E5%AE%89%E8%A3%85)
+    - [2.2.2 AS运行和配置](#222-AS%E8%BF%90%E8%A1%8C%E5%92%8C%E9%85%8D%E7%BD%AE)
+  - [2.3 Segger安装和配置](#23-Segger%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE)
+    - [2.3.1 下载和安装SES](#231-%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85SES)
+    - [2.3.2 下载nRF5_SDK](#232-%E4%B8%8B%E8%BD%BDnRF5SDK)
+    - [2.3.3 下载nRF5命令行工具](#233-%E4%B8%8B%E8%BD%BDnRF5%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7)
+    - [2.3.4 测试是否成功](#234-%E6%B5%8B%E8%AF%95%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F)
+  - [2.4 初识nRF52840板子](#24-%E5%88%9D%E8%AF%86nRF52840%E6%9D%BF%E5%AD%90)
+- [3. 实战体验：一个使用ndn-lite的应用示例](#3-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8C%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8ndn-lite%E7%9A%84%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B)
+  - [3.1 需求介绍](#31-%E9%9C%80%E6%B1%82%E4%BB%8B%E7%BB%8D)
+  - [3.2 Andorid应用程序](#32-Andorid%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F)
+    - [3.2.1 下载NDN-IoT-Android库](#321-%E4%B8%8B%E8%BD%BDNDN-IoT-Android%E5%BA%93)
+    - [3.2.2 用Android Studio去打开这个Project](#322-%E7%94%A8Android-Studio%E5%8E%BB%E6%89%93%E5%BC%80%E8%BF%99%E4%B8%AAProject)
+    - [3.2.3 编译运行App](#323-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8CApp)
+  - [3.3 nRF52840开发板程序](#33-nRF52840%E5%BC%80%E5%8F%91%E6%9D%BF%E7%A8%8B%E5%BA%8F)
+    - [3.3.1 下载nRFProject到本地](#331-%E4%B8%8B%E8%BD%BDnRFProject%E5%88%B0%E6%9C%AC%E5%9C%B0)
+    - [3.3.2 修改nRFProject中的SDK和ndn-lite路径](#332-%E4%BF%AE%E6%94%B9nRFProject%E4%B8%AD%E7%9A%84SDK%E5%92%8Cndn-lite%E8%B7%AF%E5%BE%84)
+    - [3.3.3 Build编译nRF52Project](#333-Build%E7%BC%96%E8%AF%91nRF52Project)
+      - [找不到micro_ecc_lib_nrf52.a文件？](#%E6%89%BE%E4%B8%8D%E5%88%B0microecclibnrf52a%E6%96%87%E4%BB%B6)
+  - [3.4 实现效果](#34-%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C)
+    - [3.4.1 将nRFProject分别烧录到nRF52840板](#341-%E5%B0%86nRFProject%E5%88%86%E5%88%AB%E7%83%A7%E5%BD%95%E5%88%B0nRF52840%E6%9D%BF)
+      - [烧录第一块板子](#%E7%83%A7%E5%BD%95%E7%AC%AC%E4%B8%80%E5%9D%97%E6%9D%BF%E5%AD%90)
+      - [烧录第二块板子](#%E7%83%A7%E5%BD%95%E7%AC%AC%E4%BA%8C%E5%9D%97%E6%9D%BF%E5%AD%90)
+    - [3.4.2 显示效果](#342-%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C)
+- [4. ndn-lite学习与使用](#4-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
+  - [4.1 ndn-lite体系结构](#41-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
+  - [4.2 ndn-lite库的代码结构](#42-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
+
+<!-- /TOC -->
   
 # 1. 初识ndn-lite
   
