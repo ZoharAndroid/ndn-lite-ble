@@ -431,5 +431,14 @@ ndn-lite系统结构图如下：
 
 ## 4.2 ndn-lite库的代码结构
 
+打开SES软件，可以看到ndn-lite的代码结构如下图所示。
 
-  
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/ndn-lite%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84.png?raw=true)
+
+* `./encode`目录：NDN包的编码和解码。
+* `./forwarder`目录：NDN轻量级的转发实现和网络Face抽象。
+* `./face`目录：网络face和应用face的实现。每个face实例可能需要硬件/OS适配。
+* `./securtiy`目录：安全支持。
+* `./app-support`目录：访问控制、服务发现和其他可以促进应用程序开发的高级模块。
+* `./adaptation`目录：硬件/操作系统适配。当使用ndn-lite时，开发人员应该为他们的应用程序开发所使用的平台/OS选择一个或多个适配。
+
