@@ -37,6 +37,9 @@
     - [4.1.1. BLE Mesh相关慨念](#411-BLE-Mesh%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
     - [4.1.2. nRF52 for Mesh体系结构](#412-nRF52-for-Mesh%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [4.2. 实例操作：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
+    - [硬件要求](#%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
+    - [软件要求](#%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
+    - [](#)
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
@@ -473,12 +476,43 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 ### 4.1.2. nRF52 for Mesh体系结构
 
+具体内容的链接为：https://infocenter.nordicsemi.com/index.jsp?topic=%2Fcom.nordic.infocenter.meshsdk.v3.1.0%2Fmd_doc_introduction_basic_architecture.html
 
+下面这幅图片就是nRF52 for mesh的体系结构图：
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/nRF52for_mesh.png?raw=true)
 
 ## 4.2. 实例操作：nRF52上运行一个BLE Mesh的例子
 
+ 本示例 light switch example 演示了mesh网络生态系统的主要部分。 它由三个小例子组成：
 
+1. **灯开关服务器**：实现Generic OnOff服务器模型的简约服务器，用于接收状态数据并控制板上LED 1的状态。
+2. **灯开关客户端**：实现Generic OnOff客户端模型的四个实例的简约客户端。 当用户按下任何按钮时，OnOff Set消息将发送到配置的目标地址。
+3. **Mesh Provisioner**：一个简单的静态配置器实现，用于设置演示网络。 该配置器提供一个网状网络中的所有节点。 此外，供应者还在这些节点上配置网格模型实例的密钥绑定和发布和订阅设置，以使它们能够相互通信。
 
+下图给出了将在此示例中设置的网状网络的整体视图。 括号中的数字表示供应者分配给这些节点的地址。
+
+![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/mesh_network_demonstration.png?raw=true)
+
+### 硬件要求
+
+需要至少2块nRF52840板子：
+
+* 1块对应与客户端
+* 1块或多块用于服务端（最多30块）
+
+此外，您还需要以下其中一项：
+
+* 如果您使用静态配置程序示例，则还需要1块nRF5开发板。
+* 如果使用App进行配置，则需要下载nRF Mesh App（iOS或Android），
+
+### 软件要求
+
+* nRF5 SDK for Mesh
+* nrfjprog(安装过nRFx Command Line Tools for Windows就会包括)
+* Python3 
+
+### 
 
 # 5. ndn-lite学习与使用
 
