@@ -37,9 +37,12 @@
     - [4.1.1. BLE Mesh相关慨念](#411-BLE-Mesh%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
     - [4.1.2. nRF52 for Mesh体系结构](#412-nRF52-for-Mesh%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [4.2. 实例操作：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
-    - [硬件要求](#%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
-    - [软件要求](#%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
-    - [操作步骤](#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
+    - [4.2.1. 硬件要求](#421-%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
+    - [4.2.2. 软件要求](#422-%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
+    - [4.2.3. 操作步骤](#423-%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
+      - [4.2.3.1. nRF Mesh手机软件安装](#4231-nRF-Mesh%E6%89%8B%E6%9C%BA%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85)
+      - [4.2.3.2. nRF52安装Client和Server应用](#4232-nRF52%E5%AE%89%E8%A3%85Client%E5%92%8CServer%E5%BA%94%E7%94%A8)
+      - [4.2.3.3.](#4233)
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
@@ -494,7 +497,7 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/mesh_network_demonstration.png?raw=true)
 
-### 硬件要求
+### 4.2.1. 硬件要求
 
 需要至少2块nRF52840板子：
 
@@ -504,15 +507,34 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 此外，您还需要以下其中一项：
 
 * 如果使用静态配置程序示例，则还需要1块nRF52开发板。
-* 如果使用App进行配置，则需要下载nRF Mesh App（iOS或Android），
+* 如果使用App进行配置，则需要下载nRF Mesh App（iOS或Android）。Android版本下载地址为：https://github.com/NordicSemiconductor/Android-nRF-Mesh-Library/releases 。iOS源码下载地址为：https://github.com/NordicSemiconductor/IOS-nRF-Mesh-Library/releases 。
 
-### 软件要求
+### 4.2.2. 软件要求
 
 * nRF5 SDK for Mesh
 * nrfjprog(安装过nRFx Command Line Tools for Windows就会包括)
-* Python3 
 
-### 操作步骤
+### 4.2.3. 操作步骤
+
+这里选用App作为Mesh Provisioner，这里的App也就是nRF Mesh；然后选择一块nRF52板子作为客户端，也就是能够通过客户端板子上的按钮去操作自己或者服务端的LED1灯的开关。选择一块nRF52板子作为服务端，用于显示板子上LED1灯的ON/OFF状态。
+
+如果不用App作为Mesh Provisioner，那么就还需要一块nRF52板子把Provisioner程序下载进去来当做Provisioner来处理。如有机会后面会进行补充。
+
+#### 4.2.3.1. nRF Mesh手机软件安装
+
+这里针对的是安卓系统上进行实例，对于nRF Mesh安卓应用程序的安装没有什么要讲的，直接下载apk文件，然后进行安装即可。把相应的权限打开就行。
+
+#### 4.2.3.2. nRF52安装Client和Server应用
+
+Client和Server安装到nRF52板子的操作是一样的，所以这里只用Client来说明。
+
+找到`nrf5_SDK_for_Mesh_v310_src`目录(这里名字可能不一样)，这是官方提供的nRF5对mesh的SDK，然后找到该目录下`\nrf5_SDK_for_Mesh_v310_src\examples\light_switch`目录，里面有`client`、`server`和`provisioner`三个文件夹，分别对应`switch`、`light`和`provisoner`。这里以client为例，所以继续打开client目录。
+
+
+
+#### 4.2.3.3. 
+
+
 
 # 5. ndn-lite学习与使用
 
