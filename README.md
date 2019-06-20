@@ -39,7 +39,7 @@
   - [4.2. 实例操作：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
     - [硬件要求](#%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
     - [软件要求](#%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
-    - [](#)
+    - [操作步骤](#%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
@@ -503,7 +503,7 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 此外，您还需要以下其中一项：
 
-* 如果您使用静态配置程序示例，则还需要1块nRF5开发板。
+* 如果使用静态配置程序示例，则还需要1块nRF52开发板。
 * 如果使用App进行配置，则需要下载nRF Mesh App（iOS或Android），
 
 ### 软件要求
@@ -512,7 +512,7 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 * nrfjprog(安装过nRFx Command Line Tools for Windows就会包括)
 * Python3 
 
-### 
+### 操作步骤
 
 # 5. ndn-lite学习与使用
 
