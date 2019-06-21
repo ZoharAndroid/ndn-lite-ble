@@ -534,19 +534,48 @@ Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Cli
 
 ![目录级相同](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/%E7%9B%AE%E5%BD%95%E7%BA%A7%E5%88%AB.png)
 
-点击`Build`去编译该Solution，编译完后选择`Target -> Connect J-Link`，之后会弹出一个让你选择的是哪块板子的对话框，如下图，这里随便选一个，但是之后安装Server要选择另外一个。图片上所显示的SN号，就是对应着每块板子上J-link OB主芯片上的一串数字。
+先点击`Target -> Erase All`擦出板子上的程序，然后点击`Build`去编译该Solution，编译完后选择`Target -> Connect J-Link`，之后会弹出一个让你选择的是哪块板子的对话框，如下图，这里随便选一个，但是之后安装Server要选择另外一个。图片上所显示的SN号，就是对应着每块板子上J-link OB主芯片上的一串数字。
 
 ![jlink选择](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/jlink%E8%BF%9E%E6%8E%A5.png)
 
 然后点击`Target -> Download xx`把程序下载到开发板即可。Server和Provisioner烧录程序是一样的，不再重复说明。
 
+
 #### 4.2.3.3. nRF Mesh App配置节点
 
+1. 打开nRF Mesh App，点击由下角的<kbd>+</kbd>，如下图,之后就会弹出授予权限的要求，把对应的权限都选择允许。这里会要求把蓝牙打开。
 
+<p align = "center">
+<img src= "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/meshapp.png" width = "400px"/>
+</p>
+ 
+2. 接下来就会进行Scanner，就会出现如下图所示，一个是Switch对应的就是Client客户端，一个就是Light对应的就是Server服务端。
 
+<p align = "center">
+<img src= "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/scanner.png" width = "400px"/>
+</p>
 
+1. 点击<kbd>Mesh Light</kbd>，就会跳转界面，然后点击<kbd>IDENTIFY</kbd>，然后在接下来的界面点击<kbd>PROVISION</kbd>，之后会跳出一个对话框，选择OOB类型，选择<kbd>ok</kbd>，接下来就会显示配置过程，直到出现配置完成对话框出现，点击<kbd>ok</kbd>。在App底部的Network标签下就会出现配置好的Mesh Light。整个过程如下五张图片所示。
 
+<p align = "center">
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/identify.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/provision.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/oobtype.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/configurecomplete.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightfinish.png" width = "200px"/>
+</p>
 
+4. 上面还只是把Light加入到Provisioner之中，还有switch没有加入。接下来继续点击右下角的</kbd>+</kbd>，在scanner界面就会显示switch，然后点击<kbd>Mesh Switch</kbd>，跳转到相应的界面，然后点击<kbd>IDENTIFY</kbd>，然后在接下来的界面点击<kbd>PROVISION</kbd>，之后会跳出一个对话框，选择OOB类型，选择<kbd>ok</kbd>，接下来就会显示配置过程，直到出现配置完成对话框出现，点击<kbd>ok</kbd>。在App底部的Network标签下就会出现配置好的Mesh Light和Mesh Switch。整个过程如下五张图片所示。
+
+<p align = "center">
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchprov.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchoob.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchconf.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchfinish.png" width = "200px"/>
+</p>
+
+5. 将Generic OnOff 客户端和服务端模型实例绑定相同的AppKey。选中App底部的Network标签，点击列出来的齿轮状的图标，这里只以Light为例，Switch的操作也是一样的，不再重复。
+
+<p align = "center">
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightelement.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightserver.png" width = "200px"/> ->
+</p>
+
+<p align = "center">
+ <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightboundkey.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightselectkey.png" width = "200px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightbackkey.png" width = "200px"/>
+ </p>
 
 # 5. ndn-lite学习与使用
 
