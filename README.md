@@ -41,8 +41,8 @@
     - [4.2.2. 软件要求](#422-%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
     - [4.2.3. 操作步骤](#423-%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
       - [4.2.3.1. nRF Mesh手机软件安装](#4231-nRF-Mesh%E6%89%8B%E6%9C%BA%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85)
-      - [4.2.3.2. nRF52安装Client和Server应用](#4232-nRF52%E5%AE%89%E8%A3%85Client%E5%92%8CServer%E5%BA%94%E7%94%A8)
-      - [4.2.3.3.](#4233)
+      - [4.2.3.2. nRF52烧录Client和Server应用](#4232-nRF52%E7%83%A7%E5%BD%95Client%E5%92%8CServer%E5%BA%94%E7%94%A8)
+      - [4.2.3.3. nRF Mesh App配置节点](#4233-nRF-Mesh-App%E9%85%8D%E7%BD%AE%E8%8A%82%E7%82%B9)
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
@@ -487,13 +487,13 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 ## 4.2. 实例操作：nRF52上运行一个BLE Mesh的例子
 
- 本示例 light switch example 演示了mesh网络生态系统的主要部分。 它由三个小例子组成：
+ 本示例 light switch example 演示了mesh网络生态系统的主要部分。 它由三个部分组成：
 
-1. **灯开关服务器**：实现Generic OnOff服务器模型的简约服务器，用于接收状态数据并控制板上LED 1的状态。
-2. **灯开关客户端**：实现Generic OnOff客户端模型的四个实例的简约客户端。 当用户按下任何按钮时，OnOff Set消息将发送到配置的目标地址。
-3. **Mesh Provisioner**：一个简单的静态配置器实现，用于设置演示网络。 该配置器提供一个网状网络中的所有节点。 此外，供应者还在这些节点上配置网格模型实例的密钥绑定和发布和订阅设置，以使它们能够相互通信。
+1. **灯开关服务器**：实现Generic OnOff服务器模型，用于接收状态数据并控制板上LED 1的状态。
+2. **灯开关客户端**：实现Generic OnOff客户端模型，当用户按下任何按钮时，OnOff Set消息将发送到配置的目标地址。
+3. **Mesh Provisioner**：一个简单的配置器实现，用于设置网络。该配置器能配置mesh网络中的所有节点。 此外，配置器还能在这些节点上配置模型实例的密钥绑定、发布和订阅设置，以使它们能够相互通信。
 
-下图给出了将在此示例中设置的网状网络的整体视图。 括号中的数字表示供应者分配给这些节点的地址。
+下图给出了将在此示例中设置的mesh网络的整体视图。 括号中的数字表示配置器分配给这些节点的地址。
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/mesh_network_demonstration.png?raw=true)
 
@@ -516,23 +516,35 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 ### 4.2.3. 操作步骤
 
-这里选用App作为Mesh Provisioner，这里的App也就是nRF Mesh；然后选择一块nRF52板子作为客户端，也就是能够通过客户端板子上的按钮去操作自己或者服务端的LED1灯的开关。选择一块nRF52板子作为服务端，用于显示板子上LED1灯的ON/OFF状态。
+这里选用App作为Mesh Provisioner，这里的App也就是nRF Mesh；选择一块nRF52板子作为客户端，也就是能够通过客户端板子上的按钮去操作自己或者服务端上LED1灯的开关；选择一块nRF52板子作为服务端，用于显示板子上LED1灯的ON/OFF状态。
 
-如果不用App作为Mesh Provisioner，那么就还需要一块nRF52板子把Provisioner程序下载进去来当做Provisioner来处理。如有机会后面会进行补充。
+如果不用App作为Mesh Provisioner，那么就还需要一块nRF52板子，然后把Provisioner程序下载进去来当做Provisioner，这里下载安装Provisioner程序的操作和`4.2.3.2节 nRF52安装Client和Server应用`步骤一样的。如有机会后面会进行详细补充。
 
 #### 4.2.3.1. nRF Mesh手机软件安装
 
 这里针对的是安卓系统上进行实例，对于nRF Mesh安卓应用程序的安装没有什么要讲的，直接下载apk文件，然后进行安装即可。把相应的权限打开就行。
 
-#### 4.2.3.2. nRF52安装Client和Server应用
+#### 4.2.3.2. nRF52烧录Client和Server应用
 
-Client和Server安装到nRF52板子的操作是一样的，所以这里只用Client来说明。
+Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Client来说明。
 
-找到`nrf5_SDK_for_Mesh_v310_src`目录(这里名字可能不一样)，这是官方提供的nRF5对mesh的SDK，然后找到该目录下`\nrf5_SDK_for_Mesh_v310_src\examples\light_switch`目录，里面有`client`、`server`和`provisioner`三个文件夹，分别对应`switch`、`light`和`provisoner`。这里以client为例，所以继续打开client目录。
+找到`nrf5_SDK_for_Mesh_v310_src`目录(这里名字可能不一样)，这是官方提供的nRF5对mesh的SDK，然后找到该目录下`\nrf5_SDK_for_Mesh_v310_src\examples\light_switch`目录，里面有`client`、`server`和`provisioner`三个文件夹，分别对应`switch`、`light`和`provisoner`。这里以client为例，所以继续打开client目录，用SES软件打开`light_switch_client_nrf52840_xxAA_s140_6_1_0.emProject`这个Solution。
+
+在`Build`之前，请确保`nRF5_SDK_15.2.0_9412b96`与`nrf5_SDK_for_Mesh_v310_src`在同一级，如下图所示。这么做是因为nRF5_for_mesh是基于nRF5_15版本的SDK的，所以请保持它们在同一目录级，否则会出现找不到某些文件。
+
+![目录级相同](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/%E7%9B%AE%E5%BD%95%E7%BA%A7%E5%88%AB.png)
+
+点击`Build`去编译该Solution，编译完后选择`Target -> Connect J-Link`，之后会弹出一个让你选择的是哪块板子的对话框，如下图，这里随便选一个，但是之后安装Server要选择另外一个。图片上所显示的SN号，就是对应着每块板子上J-link OB主芯片上的一串数字。
+
+![jlink选择](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/jlink%E8%BF%9E%E6%8E%A5.png)
+
+然后点击`Target -> Download xx`把程序下载到开发板即可。Server和Provisioner烧录程序是一样的，不再重复说明。
+
+#### 4.2.3.3. nRF Mesh App配置节点
 
 
 
-#### 4.2.3.3. 
+
 
 
 
