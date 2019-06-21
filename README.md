@@ -43,7 +43,7 @@
       - [4.2.3.1. nRF Mesh手机软件安装](#4231-nRF-Mesh%E6%89%8B%E6%9C%BA%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85)
       - [4.2.3.2. nRF52烧录Client和Server应用](#4232-nRF52%E7%83%A7%E5%BD%95Client%E5%92%8CServer%E5%BA%94%E7%94%A8)
       - [4.2.3.3. nRF Mesh App配置节点](#4233-nRF-Mesh-App%E9%85%8D%E7%BD%AE%E8%8A%82%E7%82%B9)
-      - [显示效果](#%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C)
+    - [4.2.4. 显示效果](#424-%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C)
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
@@ -599,7 +599,7 @@ Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Cli
 <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/server7.png" width = "180px"/>
 </p>
 
-#### 显示效果
+### 4.2.4. 显示效果
 
 按Switch客户端的Button1可以同时**打开**客户端和服务端的LED1，按Switch客户端的Button2可以同时**关闭**客户端和服务端的LED1。
 
