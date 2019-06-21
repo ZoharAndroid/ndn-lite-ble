@@ -603,6 +603,8 @@ Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Cli
 
 按Switch客户端的Button1可以同时**打开**客户端和服务端的LED1，按Switch客户端的Button2可以同时**关闭**客户端和服务端的LED1。
 
+![](https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/mesh%E6%95%88%E6%9E%9C.gif)
+
 # 5. ndn-lite学习与使用
 
 这部分将会深入去学习ndn-lite相关的内容，对使用ndn-lite打下基础。
