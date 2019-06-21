@@ -558,23 +558,31 @@ Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Cli
 1. 点击<kbd>Mesh Light</kbd>，就会跳转界面，然后点击<kbd>IDENTIFY</kbd>，然后在接下来的界面点击<kbd>PROVISION</kbd>，之后会跳出一个对话框，选择OOB类型，选择<kbd>ok</kbd>，接下来就会显示配置过程，直到出现配置完成对话框出现，点击<kbd>ok</kbd>。在App底部的Network标签下就会出现配置好的Mesh Light。整个过程如下五张图片所示。
 
 <p align = "center">
-<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/identify.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/provision.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/oobtype.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/configurecomplete.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightfinish.png" width = "160px"/>
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/identify.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/provision.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/oobtype.png" width = "180px"/> ->
+</p>
+
+<p align = "center">
+ <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/configurecomplete.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightfinish.png" width = "180px"/>
 </p>
 
 4. 上面还只是把Light加入到Provisioner之中，还有switch没有加入。接下来继续点击右下角的</kbd>+</kbd>，在scanner界面就会显示switch，然后点击<kbd>Mesh Switch</kbd>，跳转到相应的界面，然后点击<kbd>IDENTIFY</kbd>，然后在接下来的界面点击<kbd>PROVISION</kbd>，之后会跳出一个对话框，选择OOB类型，选择<kbd>ok</kbd>，接下来就会显示配置过程，直到出现配置完成对话框出现，点击<kbd>ok</kbd>。在App底部的Network标签下就会出现配置好的Mesh Light和Mesh Switch。整个过程如下五张图片所示。
 
 <p align = "center">
-<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchprov.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchoob.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchconf.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchfinish.png" width = "160px"/>
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchprov.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchoob.png" width = "180px"/> -> 
+</p>
+
+<p align = "center">
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchconf.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switchfinish.png" width = "180px"/>
 </p>
 
 5. 将Generic OnOff 客户端和服务端模型实例绑定相同的AppKey。选中App底部的Network标签，点击列出来的齿轮状的图标，这里只以Light为例，Switch的操作也是一样的，不再重复。
 
 <p align = "center">
-<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightelement.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightserver.png" width = "160px"/> ->
+<img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/switch.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightelement.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightserver.png" width = "180px"/> ->
 </p>
 
 <p align = "center">
- <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightboundkey.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightselectkey.png" width = "160px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightbackkey.png" width = "160px"/>
+ <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightboundkey.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightselectkey.png" width = "180px"/> -> <img src = "https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-6-17/lightbackkey.png" width = "180px"/>
  </p>
 
 # 5. ndn-lite学习与使用
