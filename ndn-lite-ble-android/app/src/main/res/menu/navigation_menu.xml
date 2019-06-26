@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_bluetooth_navigation"
+            android:icon="@mipmap/navigation_bluetooth"
+            android:title="@string/bluetooth"/>
+
+        <item
+            android:id="@+id/item_device_navigation"
+            android:icon="@mipmap/devices"
+            android:title="@string/devices"/>
+
+        <item
+            android:id="@+id/item_wifi_navigation"
+            android:icon="@mipmap/wifi"
+            android:title="@string/wifi"/>
+
+    </group>
+
+    <item
+        android:actionLayout="@layout/layout_line_horizional"
+        android:title=""/>
+
+</menu>

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">NDN-Lite BLE</string>
+
+    <!--toolbar-->
+    <string name="scan_qr_code">扫一扫</string>
+    <string name="refresh">刷新</string>
+
+    <!--侧滑栏-->
+    <string name="bluetooth">蓝牙</string>
+    <string name="devices">设备</string>
+    <string name="wifi">Wi-Fi</string>
 </resources>
