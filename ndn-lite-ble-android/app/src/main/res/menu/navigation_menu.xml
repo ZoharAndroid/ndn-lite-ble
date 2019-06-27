@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/item_group1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_device_navigation"
+            android:icon="@mipmap/device_icon"
+            android:title="@string/devices"/>
 
         <item
             android:id="@+id/item_bluetooth_navigation"
             android:icon="@mipmap/navigation_bluetooth"
             android:title="@string/bluetooth"/>
 
-        <item
-            android:id="@+id/item_device_navigation"
-            android:icon="@mipmap/devices"
-            android:title="@string/devices"/>
 
         <item
             android:id="@+id/item_wifi_navigation"
@@ -20,8 +23,35 @@
 
     </group>
 
-    <item
-        android:actionLayout="@layout/layout_line_horizional"
-        android:title=""/>
+    <group
+        android:id="@+id/item_group2"
+        android:checkableBehavior="single">
+
+        <item
+            android:title="@string/device_information"
+            android:id="@+id/item_device_information_navigation"
+            android:icon="@mipmap/device_information_icon"/>
+
+        <item
+            android:title="@string/settings"
+            android:id="@+id/item_settings_navigation"
+            android:icon="@mipmap/setting_icon"/>
+
+    </group>
+
+    <group
+        android:id="@+id/item_group3"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/item_share_navigation"
+            android:title="@string/share"
+            android:icon="@mipmap/share_icon"/>
+
+        <item
+            android:id="@+id/item_feedback_navigation"
+            android:title="@string/feedback"
+            android:icon="@mipmap/feedback_icon"/>
+    </group>
 
 </menu>

@@ -9,4 +9,8 @@
     <string name="bluetooth">蓝牙</string>
     <string name="devices">设备</string>
     <string name="wifi">Wi-Fi</string>
+    <string name="device_information">设备信息</string>
+    <string name="settings">设置</string>
+    <string name="share">分享</string>
+    <string name="feedback">反馈</string>
 </resources>
