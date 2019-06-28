@@ -1,23 +1,26 @@
 package zohar.com.ndn_liteble;
 
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     // BLE开启按钮
     private Button mStartBleButton;
 
-    private final int BLE_REQUSET_CODE = 111;
+
 
     // 蓝牙状态的监听
     private BluetoothListenerRecevier mBluetoothRecevier;
@@ -103,19 +106,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     /**
      * 开启蓝牙
      */
     public void onEnableBluetoothClicked() {
         Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enableIntent, BLE_REQUSET_CODE);
+        startActivityForResult(enableIntent, Constant.REQUSET_BLE_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode) {
-            case BLE_REQUSET_CODE: // 蓝牙开启
+            case Constant.REQUSET_BLE_CODE: // 蓝牙开启
                 mBleView.setVisibility(View.GONE);
                 break;
 
@@ -160,11 +162,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.toolbar_scan_qr_code:
-                Intent qrIntent = new Intent(MainActivity.this, CaptureActivity.class);
-                startActivity(qrIntent);
+            case R.id.toolbar_scan_qr_code: // 打开相机扫描二维码
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.CAMERA}, Constant.PERMISSION_CAMER);
+                }else {
+                    startCameraActivityForResult();
+                }
                 break;
             case R.id.toolbar_refresh:
+                break;
+            case R.id.create_qr_toolbar: // 创建二维码
                 break;
             case android.R.id.home:
                 // 点击返回按钮
@@ -173,6 +180,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case Constant.PERMISSION_CAMER:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    startCameraActivityForResult();
+                }else{
+                    Toast.makeText(MainActivity.this, "权限授予失败",Toast.LENGTH_SHORT).show();
+                }
+                break;
+                default:
+        }
+    }
+
+    /**
+     * 带返回结果的打开相机扫描二维码
+     */
+    private void startCameraActivityForResult(){
+        Intent qrIntent = new Intent(MainActivity.this, CaptureActivity.class);
+        startActivityForResult(qrIntent, Constant.REQUSET_QR);
     }
 
     @Override

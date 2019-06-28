@@ -13,4 +13,9 @@
         android:title="@string/refresh"
         android:icon="@mipmap/toolbar_refresh"
         app:showAsAction="never" />
+
+    <item android:id="@+id/create_qr_toolbar"
+        android:title="生成二维码"
+        app:showAsAction="never"
+        android:icon="@mipmap/create_qr"/>
 </menu>
