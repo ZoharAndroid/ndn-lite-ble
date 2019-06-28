@@ -26,25 +26,25 @@
 
 
         <!-- 屏幕主内容 -->
-        <include layout="@layout/main_content"/>
+        <FrameLayout
+            android:id="@+id/coordinator_main_content_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <!--悬浮按钮-->
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floating_button_main_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/floating_icon"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom|end" />
+
+
+
     </android.support.design.widget.CoordinatorLayout>
 
 
+    <!--侧滑栏-->
     <android.support.design.widget.NavigationView
         android:id="@+id/nv_main_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        android:layout_gravity="start" />
+        app:menu="@menu/navigation_menu" />
 
 </android.support.v4.widget.DrawerLayout>
