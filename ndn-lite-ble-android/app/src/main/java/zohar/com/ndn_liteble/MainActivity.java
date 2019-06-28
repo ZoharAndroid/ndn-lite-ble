@@ -26,6 +26,10 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.zxing.client.android.CaptureActivity;
+
+import zohar.com.ndn_liteble.utils.Constant;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,6 +118,13 @@ public class MainActivity extends AppCompatActivity {
             case BLE_REQUSET_CODE: // 蓝牙开启
                 mBleView.setVisibility(View.GONE);
                 break;
+
+            case Constant.REQUSET_QR: // 扫描二维码
+                if (requestCode == RESULT_OK){
+                    String qrResult = data.getStringExtra(Constant.QR_RESULT);
+                    Toast.makeText(MainActivity.this,qrResult,Toast.LENGTH_SHORT).show();
+                }
+                break;
             default:
         }
     }
@@ -150,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.toolbar_scan_qr_code:
+                Intent qrIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivity(qrIntent);
                 break;
             case R.id.toolbar_refresh:
                 break;
