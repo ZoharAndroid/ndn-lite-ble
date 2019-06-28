@@ -14,6 +14,10 @@
     <string name="share">分享</string>
     <string name="feedback">反馈</string>
 
+    <!--shareactivity-->
+    <string name="method1">方法1：</string>
+    <string name="method2">方法2：</string>
+
     <string name="app_picker_name">应用</string>
     <string name="bookmark_picker_name">书签</string>
     <string name="button_add_calendar">添加至日程表</string>
@@ -33,7 +37,7 @@
     <string name="button_share_bookmark">分享书签</string>
     <string name="button_share_by_email">通过 E-mail 分享</string>
     <string name="button_share_by_sms">通过短信分享</string>
-    <string name="button_share_clipboard">分享剪切板</string>
+    <string name="button_share_clipboard">剪切板生成二维码</string>
     <string name="button_share_contact">分享联系人</string>
     <string name="button_show_map">显示地图</string>
     <string name="button_sms">发送短信</string>
@@ -81,7 +85,7 @@
     <string name="msg_sbc_searching_book">搜索图书…</string>
     <string name="msg_sbc_snippet_unavailable">摘录不可用</string>
     <string name="msg_share_explanation">您可以通过在自己的手机上显示条码，并使用其它手机扫描此条码的方式进行分享</string>
-    <string name="msg_share_text">或键入一些文字</string>
+    <string name="msg_share_text">输入一些文字生成二维码</string>
     <string name="msg_sure">确定吗？</string>
     <string name="msg_unmount_usb">抱歉，无法访问 SD 卡。</string>
     <string name="preferences_actions_title">扫描成功</string>

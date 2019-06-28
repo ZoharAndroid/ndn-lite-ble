@@ -30,6 +30,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.zxing.client.android.CaptureActivity;
+import com.google.zxing.client.android.share.ShareActivity;
 
 import zohar.com.ndn_liteble.utils.Constant;
 
@@ -172,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.toolbar_refresh:
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
+                startCreateQRActivity();
                 break;
             case android.R.id.home:
                 // 点击返回按钮
@@ -194,6 +196,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
                 default:
         }
+    }
+
+    /**
+     * 开启创建Activity界面
+     */
+    private void startCreateQRActivity(){
+        Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+        startActivity(intent);
     }
 
     /**
