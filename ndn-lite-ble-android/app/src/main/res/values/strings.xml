@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NDN-Lite BLE</string>
+   <string name="app_name">NDN-Lite BLE</string>
 
     <!--toolbar-->
     <string name="scan_qr_code">扫一扫</string>
@@ -14,7 +14,6 @@
     <string name="share">分享</string>
     <string name="feedback">反馈</string>
 
-    <string name="app_name">条码扫描器</string>
     <string name="app_picker_name">应用</string>
     <string name="bookmark_picker_name">书签</string>
     <string name="button_add_calendar">添加至日程表</string>
