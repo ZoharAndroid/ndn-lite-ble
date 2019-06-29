@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 侧滑栏
         mNavView.setCheckedItem(R.id.item_device_navigation);
-        final DeivceFragment deviceFragment = new DeivceFragment();
+        final DeviceFragment deviceFragment = new DeviceFragment();
         replaceFragment(deviceFragment);
         actionBar.setTitle("设备");
         //侧护栏显示宽度，默认宽度太宽了，这里修改为屏幕的2/3
