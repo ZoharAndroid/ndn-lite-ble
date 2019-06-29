@@ -5,6 +5,8 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="colordark">#dbdbdb</color>
+    <color name="colortextdark">#707070</color>
+    <color name="colortext">#2c2c2c</color>
 
     <color name="contents_text">#ff000000</color>
     <color name="encode_view">#ffffffff</color>

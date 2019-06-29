@@ -13,4 +13,5 @@ public class Constant {
     //权限请求码
     public static final int PERMISSION_CAMER = 200; //相机权限请求码
     public static final int PERMISSION_WIRTE_STORAGE = 201;// 写存储权限
+    public static final int REQUEST_COARSE_LOCATION = 202; // 粗精度位置权限
 }
