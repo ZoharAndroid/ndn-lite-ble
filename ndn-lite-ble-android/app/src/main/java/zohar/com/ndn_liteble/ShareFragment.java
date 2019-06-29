@@ -16,6 +16,6 @@ public class ShareFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_share,container, false);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 }

@@ -167,7 +167,7 @@ public class DeivceFragment extends Fragment {
                     startCameraActivityForResult();
                 }
                 break;
-            case R.id.toolbar_refresh:
+            case R.id.toolbar_refresh: // 刷新
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
                 startCreateQRActivity();

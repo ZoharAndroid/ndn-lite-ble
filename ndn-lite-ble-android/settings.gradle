@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':ndn_lite_support_library'

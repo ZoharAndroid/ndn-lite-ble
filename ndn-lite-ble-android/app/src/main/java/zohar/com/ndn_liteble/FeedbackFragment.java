@@ -16,6 +16,6 @@ public class FeedbackFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_feedback,container, false);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 }

@@ -16,6 +16,6 @@ public class WiFiFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_wifi,container, false);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 }

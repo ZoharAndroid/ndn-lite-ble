@@ -16,6 +16,6 @@ public class DeviceInformationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_device_information,container, false);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 }
