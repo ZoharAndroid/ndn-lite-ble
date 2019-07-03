@@ -100,7 +100,7 @@ public class DeviceFragment extends Fragment {
 
     // 发送兴趣包的回调函数
     private OnInterestCallback onInterest;
-    private LinearLayout mLoadingView;
+    private ConstraintLayout mLoadingView;
 
 
     @Override
@@ -292,7 +292,7 @@ public class DeviceFragment extends Fragment {
      */
     private void initUIView() {
         m_log = view.findViewById(R.id.ui_log);
-        mLoadingView = view.findViewById(R.id.ll_loading_device);
+        mLoadingView = view.findViewById(R.id.cl_loading_device);
 
         mBleView = view.findViewById(R.id.ble_check_constraint);
         mStartBleButton = view.findViewById(R.id.btn_ble_open_main);
