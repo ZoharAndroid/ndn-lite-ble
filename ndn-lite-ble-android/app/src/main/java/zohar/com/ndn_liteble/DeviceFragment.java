@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.FormatException;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.share.ShareActivity;
 
@@ -43,6 +44,8 @@ import net.named_data.jndn.security.v2.CertificateV2;
 import net.named_data.jndn.util.Blob;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import NDNLiteSupport.BLEFace.BLEFace;
 import NDNLiteSupport.BLEUnicastConnectionMaintainer.BLEUnicastConnectionMaintainer;
@@ -117,6 +120,7 @@ public class DeviceFragment extends Fragment {
         return view;
     }
 
+
     /**
      * ndn主方法
      */
@@ -154,7 +158,7 @@ public class DeviceFragment extends Fragment {
                 m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
                         onInterest);
 
-                Interest  test_interest = new Interest(new Name("/phone/sign-on/interest"));
+                Interest  test_interest = new Interest(new Name("/sign-on/cert/interest"));
                 test_interest.setChildSelector(-1);
 
                 // 接收回来的数据
@@ -277,7 +281,7 @@ public class DeviceFragment extends Fragment {
      */
     private void requestCameraPermission() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, Constant.PERMISSION_CAMER);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constant.REQUEST_CAMER_PERMISSION);
         } else {
             startCameraActivityForResult();
         }
@@ -289,7 +293,7 @@ public class DeviceFragment extends Fragment {
      */
     private void initEvent() {
 
-        ndnLiteMainMethod();
+        //ndnLiteMainMethod();
         // 悬浮按钮
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -430,6 +434,7 @@ public class DeviceFragment extends Fragment {
                 break;
             case Constant.REQUSET_QR: // 扫描二维码
                 if (resultCode == getActivity().RESULT_OK) {
+                    Log.i(TAG,"相加开启成功！");
                     String qrResult = data.getStringExtra(Constant.QR_RESULT);
                     Toast.makeText(getContext(), qrResult, Toast.LENGTH_SHORT).show();
                 }
@@ -441,8 +446,10 @@ public class DeviceFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Constant.PERMISSION_CAMER:
+            case Constant.REQUEST_CAMER_PERMISSION:
+                Log.i(TAG,"相机请求");
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG,"相机权限请求成功！");
                     startCameraActivityForResult();
                 } else {
                     Toast.makeText(getContext(), "权限授予失败", Toast.LENGTH_SHORT).show();

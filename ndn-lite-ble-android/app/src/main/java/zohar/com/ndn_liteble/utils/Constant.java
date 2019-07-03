@@ -11,9 +11,10 @@ public class Constant {
 
 
     //权限请求码
-    public static final int PERMISSION_CAMER = 200; //相机权限请求码
+    public static final int PERMISSION_CAMER = 2000; //相机权限请求码
     public static final int PERMISSION_WIRTE_STORAGE = 201;// 写存储权限
     public static final int REQUEST_COARSE_LOCATION = 202; // 粗精度位置权限
+    public static final int REQUEST_CAMER_PERMISSION = 20003; // 请求相机权限码
 
     // for the ecc_256 variant of sign on, device identifier is 12 bytes
     public static byte[] DEVICE_IDENTIFIER_1 = new byte[] {
