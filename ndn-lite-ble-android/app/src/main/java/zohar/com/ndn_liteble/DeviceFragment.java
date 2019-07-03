@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +66,8 @@ public class DeviceFragment extends Fragment {
 
     private static final String TAG = "DeviceFragment";
 
+    // 主界面现实的内容
+    private TextView m_log;
     // fragment主界面View
     private View view;
     // BLE是否开启布局容器
@@ -95,6 +100,7 @@ public class DeviceFragment extends Fragment {
 
     // 发送兴趣包的回调函数
     private OnInterestCallback onInterest;
+    private LinearLayout mLoadingView;
 
 
     @Override
@@ -126,30 +132,28 @@ public class DeviceFragment extends Fragment {
      */
     private void ndnLiteMainMethod() {
 
-        NDNLiteSupportInit.NDNLiteSupportInit();
+        // Callback for when an interest is received. In this example, the nRf52840 sends an interest to
+        // us after sign on is complete, and triggers this callback.
+        onInterest = new OnInterestCallback() {
+            @Override
+            public void onInterest(Name prefix, Interest interest, Face face, long interestFilterId,
+                                   InterestFilter filter) {
+                logMessage(TAG, "onInterest got called, prefix of interest: " + prefix.toUri());
+            }
+        };
 
-        CertificateV2 trustAnchorCertificate = new CertificateV2();
-
-        // 初始化BLEUnicastConnectionMaintainer
-        // 必须这样做才能使SecureSignOnControllerble和Bleface完全正常工作）
-        mBLEUnicastConnectionMaintainer = BLEUnicastConnectionMaintainer.getInstance();
-        mBLEUnicastConnectionMaintainer.initialize(getActivity());
-
-        // 初始化SignOnControllerBLE
-        mSignOnBasicControllerBLE = SignOnBasicControllerBLE.getInstance();
-        mSignOnBasicControllerBLE.initialize(SIGN_ON_VARIANT_BASIC_ECC_256,
-                mSecureSignOnBasicControllerBLECallbacks, trustAnchorCertificate);
 
         // SignOn回调方法
         mSecureSignOnBasicControllerBLECallbacks = new SignOnBasicControllerBLE.SecureSignOnBasicControllerBLECallbacks() {
             @Override
             public void onDeviceSignOnComplete(String deviceIdentifierHexString) {
-                Toast.makeText(getContext(), "设备SignOn成功：" + deviceIdentifierHexString, Toast.LENGTH_SHORT).show();
-                // 设备signOn完成
-                Log.i(TAG, "设备SignOn成功: " + deviceIdentifierHexString);
-                Log.i(TAG, "设备的MAC地址： " +
+                // 隐藏加载界面
+                showLoadingView(false);
+                logMessage(TAG, "Onboarding was successful for device with device identifier hex string : " +
+                        deviceIdentifierHexString);
+                logMessage(TAG, "Mac address of device succesfully onboarded: " +
                         mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString));
-                Log.i(TAG, "设备的KDPubCertificate: " +
+                logMessage(TAG, "Name of device's KDPubCertificate: " +
                         mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString)
                                 .getName().toUri()
                 );
@@ -158,28 +162,17 @@ public class DeviceFragment extends Fragment {
                 m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
                         onInterest);
 
-                Interest  test_interest = new Interest(new Name("/sign-on/cert/interest"));
+                Interest  test_interest = new Interest(new Name("/phone/test/interest"));
                 test_interest.setChildSelector(-1);
 
-                // 接收回来的数据
+                //LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
+
                 m_bleFace.expressInterest(test_interest, new OnData() {
                     @Override
                     public void onData(Interest interest, Data data) {
-                        Log.i(TAG,"DATA" + data.toString());
+                        logMessage(TAG, "Received data in response to test interest sent to device with device identifier: " );
                     }
                 });
-
-//                // Create a BLE face to the device that onboarding completed successfully for.
-//                if (deviceIdentifierHexString.equals(m_expectedDeviceIdentifierHexString)) {
-//                    Log.i(TAG, "onDeviceSignOnComplete: create ble face for board 1");
-//                    m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
-//                            onInterest);
-//                } else if (deviceIdentifierHexString.equals(m_expectedDeviceIdentifierHexString2)) {
-//                    Log.i(TAG, "onDeviceSignOnComplete: create ble face for board 2");
-//                    m_bleFace2 = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
-//                            onInterest);
-//                } else
-//                    Log.i(TAG, "onDeviceSignOnComplete: wrong device identifier...");
             }
 
             @Override
@@ -196,43 +189,20 @@ public class DeviceFragment extends Fragment {
             }
         };
 
-        // Callback for when an interest is received. In this example, the nRf52840 sends an interest to
-        // us after sign on is complete, and triggers this callback.
-        onInterest = new OnInterestCallback() {
-            @Override
-            public void onInterest(Name prefix, Interest interest, Face face, long interestFilterId,
-                                   InterestFilter filter) {
-                Log.i(TAG, "onInterest got called, prefix of interest: " + prefix.toUri());
 
-                if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString)) {
-                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
-                            m_expectedDeviceIdentifierHexString);
+        NDNLiteSupportInit.NDNLiteSupportInit();
 
-                    try {
-                        Log.i(TAG, "Responding to interest from device with its certificate...");
-                        face.putData(
-                                SignOnBasicControllerBLE.getInstance().
-                                        getKDPubCertificateOfDevice(m_expectedDeviceIdentifierHexString)
-                        );
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString2)) {
-                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
-                            m_expectedDeviceIdentifierHexString2);
-                    try {
-                        Log.i(TAG, "Responding to interest from device with its certificate...");
-                        face.putData(
-                                SignOnBasicControllerBLE.getInstance().
-                                        getKDPubCertificateOfDevice(m_expectedDeviceIdentifierHexString2)
-                        );
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
+        CertificateV2 trustAnchorCertificate = new CertificateV2();
+
+        // 初始化BLEUnicastConnectionMaintainer
+        // 必须这样做才能使SecureSignOnControllerble和Bleface完全正常工作）
+        mBLEUnicastConnectionMaintainer = BLEUnicastConnectionMaintainer.getInstance();
+        mBLEUnicastConnectionMaintainer.initialize(getActivity());
+
+        // 初始化SignOnControllerBLE
+        mSignOnBasicControllerBLE = SignOnBasicControllerBLE.getInstance();
+        mSignOnBasicControllerBLE.initialize(SIGN_ON_VARIANT_BASIC_ECC_256,
+                mSecureSignOnBasicControllerBLECallbacks, trustAnchorCertificate);
 
         // Creating a certificate from the device1's KS key pair public key.
         CertificateV2 KSpubCertificateDevice1 = new CertificateV2();
@@ -267,6 +237,22 @@ public class DeviceFragment extends Fragment {
                 Constant.SECURE_SIGN_ON_CODE);
     }
 
+    private void logMessage(String TAG, String msg) {
+        Log.d(TAG, msg);
+        logMessageUI(TAG, msg);
+    }
+
+    private void logMessageUI(final String TAG, final String msg) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                m_log.append(TAG + ":" + "\n");
+                m_log.append(msg + "\n");
+                m_log.append("------------------------------" + "\n");
+            }
+        });
+    }
+
     /**
      * 请求位置权限
      */
@@ -292,8 +278,6 @@ public class DeviceFragment extends Fragment {
      * 初始化事件
      */
     private void initEvent() {
-
-        //ndnLiteMainMethod();
         // 悬浮按钮
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,11 +291,30 @@ public class DeviceFragment extends Fragment {
      * 初始化UI控件
      */
     private void initUIView() {
+        m_log = view.findViewById(R.id.ui_log);
+        mLoadingView = view.findViewById(R.id.ll_loading_device);
+
         mBleView = view.findViewById(R.id.ble_check_constraint);
         mStartBleButton = view.findViewById(R.id.btn_ble_open_main);
         mFloatingButton = view.findViewById(R.id.floating_button_main_activity);
         mTvBle = view.findViewById(R.id.tv_bluetooth_disable);
         mTvBleNote = view.findViewById(R.id.tv_bluetooth_disable_note);
+
+    }
+
+    /**
+     * 是否显示加载进度条
+     *
+     * @param isShow
+     *  true ： 显示
+     *  false： 不现实
+     */
+    private void showLoadingView(boolean isShow){
+        if (isShow){
+            mLoadingView.setVisibility(View.VISIBLE);
+        }else{
+            mLoadingView.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -349,6 +352,12 @@ public class DeviceFragment extends Fragment {
                     onEnableBluetoothClicked();
                 }
             });
+        }else{
+            // 如果蓝牙已经打开了
+            // 1. 启用加载加界面
+            showLoadingView(true);
+            // 2. 开启ndn-lite方法
+            ndnLiteMainMethod();
         }
 
     }
