@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -56,6 +57,8 @@ import NDNLiteSupport.BLEUnicastConnectionMaintainer.BLEUnicastConnectionMaintai
 import NDNLiteSupport.NDNLiteSupportInit;
 import NDNLiteSupport.SignOnBasicControllerBLE.SignOnBasicControllerBLE;
 import NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerResultCodes;
+import zohar.com.ndn_liteble.adapter.BoardAdapter;
+import zohar.com.ndn_liteble.model.Board;
 import zohar.com.ndn_liteble.utils.Constant;
 import zohar.com.ndn_liteble.utils.SendInterestTask;
 
@@ -104,6 +107,9 @@ public class DeviceFragment extends Fragment {
     private String m_expectedDeviceIdentifierHexString2 = "010101010101010101010102";
     private RecyclerView mRecycleNode;
 
+    // 板子的数量
+    private List<Board> boards = new ArrayList<>();
+    private BoardAdapter boardAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,6 +165,14 @@ public class DeviceFragment extends Fragment {
                         mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString)
                                 .getName().toUri()
                 );
+
+
+                Board board = new Board();
+                board.setMacAddress(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString));
+                board.setIdentifierHex(deviceIdentifierHexString);
+                board.setKDPubCertificate(mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString).getName().toUri());
+                boards.add(board);
+                boardAdapter.notifyDataSetChanged();
 
                 // Create a BLE face to the device that onboarding completed successfully for.
                 m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
@@ -302,6 +316,11 @@ public class DeviceFragment extends Fragment {
         mTvBle = view.findViewById(R.id.tv_bluetooth_disable);
         mTvBleNote = view.findViewById(R.id.tv_bluetooth_disable_note);
         mRecycleNode = view.findViewById(R.id.recycle_show_node_device);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayout.VERTICAL);
+        mRecycleNode.setLayoutManager(layoutManager);
+        boardAdapter = new BoardAdapter(boards);
+        mRecycleNode.setAdapter(boardAdapter);
     }
 
     /**
