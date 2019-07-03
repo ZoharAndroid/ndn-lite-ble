@@ -18,6 +18,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -80,6 +81,9 @@ public class DeviceFragment extends Fragment {
     private TextView mTvBleNote;
     // 悬浮按钮
     FloatingActionButton mFloatingButton;
+    // ProgressBar显示匹配节点的界面
+    private ConstraintLayout mLoadingView;
+
     // 蓝牙状态的监听
     private BluetoothListenerRecevier mBluetoothRecevier;
     // BLEUnicastConnectionMaintainer
@@ -88,19 +92,17 @@ public class DeviceFragment extends Fragment {
     private SignOnBasicControllerBLE mSignOnBasicControllerBLE;
     // signon回调
     private SignOnBasicControllerBLE.SecureSignOnBasicControllerBLECallbacks mSecureSignOnBasicControllerBLECallbacks;
-
-
-    // The device identifier of the example nRF52840, in hex string format.
-    private String m_expectedDeviceIdentifierHexString = "010101010101010101010101";
-    private String m_expectedDeviceIdentifierHexString2 = "010101010101010101010102";
-
     // 创建BLE face
     private BLEFace m_bleFace;
     private BLEFace m_bleFace2;
 
     // 发送兴趣包的回调函数
     private OnInterestCallback onInterest;
-    private ConstraintLayout mLoadingView;
+
+    // The device identifier of the example nRF52840, in hex string format.
+    private String m_expectedDeviceIdentifierHexString = "010101010101010101010101";
+    private String m_expectedDeviceIdentifierHexString2 = "010101010101010101010102";
+    private RecyclerView mRecycleNode;
 
 
     @Override
@@ -299,7 +301,7 @@ public class DeviceFragment extends Fragment {
         mFloatingButton = view.findViewById(R.id.floating_button_main_activity);
         mTvBle = view.findViewById(R.id.tv_bluetooth_disable);
         mTvBleNote = view.findViewById(R.id.tv_bluetooth_disable_note);
-
+        mRecycleNode = view.findViewById(R.id.recycle_show_node_device);
     }
 
     /**

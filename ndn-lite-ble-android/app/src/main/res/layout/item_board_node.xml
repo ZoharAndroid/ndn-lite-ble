@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_board"
+        android:layout_width="150dp"
+        android:layout_height="130dp"
+        android:src="@mipmap/ic_nrf52840"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--mac地址-->
+    <LinearLayout
+        android:id="@+id/ll_mac_address"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/iv_board"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_mac_address_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAC地址："
+        android:textColor="@color/colortextdark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:text="xx"
+        android:id="@+id/tv_mac_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colortext"
+        android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!--id识别号-->
+    <LinearLayout
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:id="@+id/ll_identifier"
+        app:layout_constraintTop_toBottomOf="@id/ll_mac_address"
+        app:layout_constraintLeft_toRightOf="@id/iv_board"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_identifier_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Identifier："
+            android:textColor="@color/colortextdark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:text="xx"
+            android:id="@+id/tv_identifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colortext"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!--KDPub-->
+    <LinearLayout
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:id="@+id/ll_kdpub"
+        app:layout_constraintTop_toBottomOf="@id/ll_identifier"
+        app:layout_constraintLeft_toRightOf="@id/iv_board"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_kdpub_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KDPubCertificate："
+            android:textColor="@color/colortextdark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:text="xx"
+            android:id="@+id/tv_kdpub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colortext"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <Switch
+        app:layout_constraintTop_toTopOf="@id/iv_board"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+
+</android.support.constraint.ConstraintLayout>
