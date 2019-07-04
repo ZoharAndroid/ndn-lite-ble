@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -140,6 +142,9 @@ public class DeviceFragment extends Fragment {
      */
     private void ndnLiteMainMethod() {
 
+        // 显示加载界面
+        showLoadingView(true);
+
         // Callback for when an interest is received. In this example, the nRf52840 sends an interest to
         // us after sign on is complete, and triggers this callback.
         onInterest = new OnInterestCallback() {
@@ -155,13 +160,12 @@ public class DeviceFragment extends Fragment {
         mSecureSignOnBasicControllerBLECallbacks = new SignOnBasicControllerBLE.SecureSignOnBasicControllerBLECallbacks() {
             @Override
             public void onDeviceSignOnComplete(String deviceIdentifierHexString) {
-                // 隐藏加载界面
-                showLoadingView(false);
-                logMessage(TAG, "Onboarding was successful for device with device identifier hex string : " +
+
+                Log.i(TAG, "Onboarding was successful for device with device identifier hex string : " +
                         deviceIdentifierHexString);
-                logMessage(TAG, "Mac address of device succesfully onboarded: " +
+                Log.i(TAG, "Mac address of device succesfully onboarded: " +
                         mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString));
-                logMessage(TAG, "Name of device's KDPubCertificate: " +
+                Log.i(TAG, "Name of device's KDPubCertificate: " +
                         mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString)
                                 .getName().toUri()
                 );
@@ -172,7 +176,15 @@ public class DeviceFragment extends Fragment {
                 board.setIdentifierHex(deviceIdentifierHexString);
                 board.setKDPubCertificate(mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString).getName().toUri());
                 boards.add(board);
-                boardAdapter.notifyDataSetChanged();
+                // 更新UI
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boardAdapter.notifyItemInserted(boards.size() - 1); // 刷新recyclerview要显示的位置
+                        mRecycleNode.scrollToPosition(boards.size() - 1); // 将recyclerview定位到最后一个位置
+                    }
+                });
+
 
                 // Create a BLE face to the device that onboarding completed successfully for.
                 m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
@@ -189,6 +201,15 @@ public class DeviceFragment extends Fragment {
                         logMessage(TAG, "Received data in response to test interest sent to device with device identifier: " );
                     }
                 });
+
+                // 隐藏加载界面
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLoadingView(false);
+                    }
+                });
+
             }
 
             @Override
@@ -319,6 +340,7 @@ public class DeviceFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayout.VERTICAL);
         mRecycleNode.setLayoutManager(layoutManager);
+        mRecycleNode.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         boardAdapter = new BoardAdapter(boards);
         mRecycleNode.setAdapter(boardAdapter);
     }
