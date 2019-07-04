@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/only_controller"
+            android:title="对自己有效"
+            android:icon="@mipmap/ic_controller"/>
+
+        <item android:icon="@mipmap/ic_all_node"
+            android:title="对多有节点有效"
+            android:id="@+id/all_node"/>
+    </group>
+</menu>

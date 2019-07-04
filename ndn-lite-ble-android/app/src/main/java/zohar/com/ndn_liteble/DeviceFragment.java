@@ -1,29 +1,24 @@
 package zohar.com.ndn_liteble;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,11 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.FormatException;
 import com.google.zxing.client.android.CaptureActivity;
 import com.google.zxing.client.android.share.ShareActivity;
 
@@ -50,11 +44,8 @@ import net.named_data.jndn.OnInterestCallback;
 import net.named_data.jndn.security.v2.CertificateV2;
 import net.named_data.jndn.util.Blob;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import NDNLiteSupport.BLEFace.BLEFace;
 import NDNLiteSupport.BLEUnicastConnectionMaintainer.BLEUnicastConnectionMaintainer;
@@ -64,9 +55,7 @@ import NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerResu
 import zohar.com.ndn_liteble.adapter.BoardAdapter;
 import zohar.com.ndn_liteble.model.Board;
 import zohar.com.ndn_liteble.utils.Constant;
-import zohar.com.ndn_liteble.utils.SendInterestTask;
 
-import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerConsts.KD_PUB_CERTIFICATE_NAME_PREFIX;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.secureSignOnVariants.SecureSignOnVariantStrings.SIGN_ON_VARIANT_BASIC_ECC_256;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.utils.SecurityHelpers.asnEncodeRawECPublicKeyBytes;
 
@@ -181,15 +170,15 @@ public class DeviceFragment extends Fragment {
                 board.setIdentifierHex(deviceIdentifierHexString);
                 board.setKDPubCertificate(mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString).getName().toUri());
 
-                for (Board temp : boards){
-                    if (temp.getIdentifierHex().equals(board.getIdentifierHex())){
+                for (Board temp : boards) {
+                    if (temp.getIdentifierHex().equals(board.getIdentifierHex())) {
                         isAddFlag = true;
                         break;
                     }
                 }
 
                 // 如果没有添加过，那么添加到List中
-                if (!isAddFlag){
+                if (!isAddFlag) {
                     boards.add(board);
                     // 更新UI
                     getActivity().runOnUiThread(new Runnable() {
@@ -201,22 +190,19 @@ public class DeviceFragment extends Fragment {
                     });
                 }
 
-
-
-
                 // Create a BLE face to the device that onboarding completed successfully for.
                 m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
                         onInterest);
 
-                Interest  test_interest = new Interest(new Name("/phone/test/interest"));
+                Interest test_interest = new Interest(new Name("/phone/test/interest"));
                 test_interest.setChildSelector(-1);
 
-                //LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
+                // LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
 
                 m_bleFace.expressInterest(test_interest, new OnData() {
                     @Override
                     public void onData(Interest interest, Data data) {
-                        logMessage(TAG, "Received data in response to test interest sent to device with device identifier: " );
+                        logMessage(TAG, "Received data in response to test interest sent to device with device identifier: ");
                     }
                 });
 
@@ -340,6 +326,58 @@ public class DeviceFragment extends Fragment {
                 Toast.makeText(getContext(), "悬浮点击按钮", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //板子点击的图片
+        boardAdapter.setOnClickBoardImageListener(new BoardAdapter.OnClickBoardImageListener() {
+            @Override
+            public void onClickBoardImageListener(View v, final int position) {
+                // 创建popup menu
+                final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                // 添加布局
+                popupMenu.getMenuInflater().inflate(R.menu.menu_police_select, popupMenu.getMenu());
+                // 注册点击事件
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        // 获取当前点击的实例
+                        Board board = boards.get(position);
+                        int currentBoardId;
+
+                        Toast.makeText(getContext(), "点击了" + position, Toast.LENGTH_SHORT).show();
+
+                        if (board.getIdentifierHex().equals(Constant.DEVICE_IDENTIFIER_1)) {
+                            currentBoardId = 1;
+                        } else {
+                            currentBoardId = 2;
+                        }
+
+                        switch (item.getItemId()) {
+                            case R.id.only_controller: // 只能控制自己
+                                Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
+                                SendInterestTaskV2 SITask = new SendInterestTaskV2();
+                                Log.i(TAG, "onMenuItemClick: constructed name is:"+ commandInterest1.toString());
+                                SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+                                Toast.makeText(getContext(), "开始转变策略：Controller",Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.all_node: // 能相互控制
+                                Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
+                                SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
+                                Log.i(TAG, "onMenuItemClick: constructed name is:"+ commandInterest2.toString());
+                                SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+                                Toast.makeText(getContext(), "开始转变策略：All node",Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                        }
+
+
+                        return false;
+                    }
+                });
+                // 显示popup menu
+                popupMenu.show();
+            }
+        });
     }
 
     /**
@@ -358,22 +396,22 @@ public class DeviceFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayout.VERTICAL);
         mRecycleNode.setLayoutManager(layoutManager);
-        mRecycleNode.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        mRecycleNode.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         boardAdapter = new BoardAdapter(boards);
         mRecycleNode.setAdapter(boardAdapter);
+
     }
 
     /**
      * 是否显示加载进度条
      *
-     * @param isShow
-     *  true ： 显示
-     *  false： 不现实
+     * @param isShow true ： 显示
+     *               false： 不现实
      */
-    private void showLoadingView(boolean isShow){
-        if (isShow){
+    private void showLoadingView(boolean isShow) {
+        if (isShow) {
             mLoadingView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mLoadingView.setVisibility(View.INVISIBLE);
         }
     }
@@ -413,7 +451,7 @@ public class DeviceFragment extends Fragment {
                     onEnableBluetoothClicked();
                 }
             });
-        }else{
+        } else {
             // 如果蓝牙已经打开了
             // 1. 启用加载加界面
             showLoadingView(true);
@@ -504,7 +542,7 @@ public class DeviceFragment extends Fragment {
                 break;
             case Constant.REQUSET_QR: // 扫描二维码
                 if (resultCode == getActivity().RESULT_OK) {
-                    Log.i(TAG,"相加开启成功！");
+                    Log.i(TAG, "相加开启成功！");
                     String qrResult = data.getStringExtra(Constant.QR_RESULT);
                     Toast.makeText(getContext(), qrResult, Toast.LENGTH_SHORT).show();
                 }
@@ -517,9 +555,9 @@ public class DeviceFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case Constant.REQUEST_CAMER_PERMISSION:
-                Log.i(TAG,"相机请求");
+                Log.i(TAG, "相机请求");
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG,"相机权限请求成功！");
+                    Log.i(TAG, "相机权限请求成功！");
                     startCameraActivityForResult();
                 } else {
                     Toast.makeText(getContext(), "权限授予失败", Toast.LENGTH_SHORT).show();
@@ -566,5 +604,66 @@ public class DeviceFragment extends Fragment {
         super.onPause();
         // 注销蓝牙的监听
         unregisterBluetoothReceiver();
+    }
+
+    /**
+     * 发送兴趣包 v2
+     */
+    public class SendInterestTaskV2 extends AsyncTask<Name, Integer, Boolean> {
+
+
+        Data comebackData = new Data();
+
+        @Override
+        protected void onPreExecute() {
+            Log.i(TAG,"SendInterestTaskV2 : onPreExecute ");
+        }
+
+        @Override
+        protected Boolean doInBackground(Name... names) {
+            Log.i(TAG, "SendInterestTaskV2 : doInBackground, names: " + names[0]);
+
+            // 回来的数据包
+            IncomingData incomingData = new IncomingData();
+
+            Interest pendingInterest = new Interest(names[0]);
+
+            try {
+                m_bleFace.expressInterest(pendingInterest, incomingData);
+                m_bleFace.processEvents();
+                Thread.sleep(50);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+        }
+
+        /**
+         * 回来的数据包
+         */
+        private class IncomingData implements OnData {
+            @Override
+            public void onData(Interest interest, Data data) {
+                Log.i(TAG,"获取数据包：" + data.getName().toUri());
+                String msg = data.getContent().toString();
+                Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
+                if (msg.length() == 0){
+                    Log.i(TAG, "数据包为空");
+                }else if (msg.length() > 0){
+                    comebackData.setContent(data.getContent());
+                }
+            }
+        }
+
+
     }
 }
