@@ -44,6 +44,7 @@ import net.named_data.jndn.OnInterestCallback;
 import net.named_data.jndn.security.v2.CertificateV2;
 import net.named_data.jndn.util.Blob;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,7 @@ import zohar.com.ndn_liteble.adapter.BoardAdapter;
 import zohar.com.ndn_liteble.model.Board;
 import zohar.com.ndn_liteble.utils.Constant;
 
+import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerConsts.KD_PUB_CERTIFICATE_NAME_PREFIX;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.secureSignOnVariants.SecureSignOnVariantStrings.SIGN_ON_VARIANT_BASIC_ECC_256;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.utils.SecurityHelpers.asnEncodeRawECPublicKeyBytes;
 
@@ -143,7 +145,32 @@ public class DeviceFragment extends Fragment {
             @Override
             public void onInterest(Name prefix, Interest interest, Face face, long interestFilterId,
                                    InterestFilter filter) {
-                logMessage(TAG, "onInterest got called, prefix of interest: " + prefix.toUri());
+                Log.i(TAG, "onInterest()回调, interest的前缀为: " + prefix.toUri());
+                // 如果interest的是board1
+                if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString)) {
+                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
+                            m_expectedDeviceIdentifierHexString);
+
+                    try {
+                        Log.i(TAG, "Responding to interest from device with its certificate...");
+                        face.putData(SignOnBasicControllerBLE.getInstance().getKDPubCertificateOfDevice(m_expectedDeviceIdentifierHexString));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                //  如果interest回调会board2
+                if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString2)) {
+                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
+                            m_expectedDeviceIdentifierHexString2);
+                    try {
+                        Log.i(TAG, "Responding to interest from device with its certificate...");
+                        face.putData(SignOnBasicControllerBLE.getInstance().getKDPubCertificateOfDevice(m_expectedDeviceIdentifierHexString2));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         };
 
@@ -191,20 +218,32 @@ public class DeviceFragment extends Fragment {
                 }
 
                 // Create a BLE face to the device that onboarding completed successfully for.
-                m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
-                        onInterest);
+                if (deviceIdentifierHexString.equals(m_expectedDeviceIdentifierHexString)) {
+                    Log.i(TAG, "onDeviceSignOnComplete: create ble face for board 1");
+                    m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
+                            onInterest);
+                } else if (deviceIdentifierHexString.equals(m_expectedDeviceIdentifierHexString2)) {
+                    Log.i(TAG, "onDeviceSignOnComplete: create ble face for board 2");
+                    m_bleFace2 = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
+                            onInterest);
+                } else
+                    Log.i(TAG, "onDeviceSignOnComplete: wrong device identifier...");
+//                m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
+//                        onInterest);
 
-                Interest test_interest = new Interest(new Name("/phone/test/interest"));
-                test_interest.setChildSelector(-1);
-
-                // LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
-
-                m_bleFace.expressInterest(test_interest, new OnData() {
-                    @Override
-                    public void onData(Interest interest, Data data) {
-                        logMessage(TAG, "Received data in response to test interest sent to device with device identifier: ");
-                    }
-                });
+//                Interest test_interest = new Interest(new Name("/phone/test/interest"));
+//                test_interest.setChildSelector(-1);
+//
+//                // LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
+//
+//                m_bleFace.expressInterest(test_interest, new
+//
+//                        OnData() {
+//                            @Override
+//                            public void onData(Interest interest, Data data) {
+//                                logMessage(TAG, "Received data in response to test interest sent to device with device identifier: ");
+//                            }
+//                        });
 
                 // 隐藏加载界面
                 getActivity().runOnUiThread(new Runnable() {
@@ -217,7 +256,8 @@ public class DeviceFragment extends Fragment {
             }
 
             @Override
-            public void onDeviceSignOnError(String deviceIdentifierHexString, SignOnControllerResultCodes.SignOnControllerResultCode resultCode) {
+            public void onDeviceSignOnError(String
+                                                    deviceIdentifierHexString, SignOnControllerResultCodes.SignOnControllerResultCode resultCode) {
                 // 设备SignOn失败
                 if (deviceIdentifierHexString != null) {
                     Log.i(TAG, "设备SigOn错误: " + deviceIdentifierHexString +
@@ -228,7 +268,9 @@ public class DeviceFragment extends Fragment {
                             "SignOnControllerResultCode: " + resultCode);
                 }
             }
-        };
+        }
+
+        ;
 
 
         NDNLiteSupportInit.NDNLiteSupportInit();
@@ -238,7 +280,9 @@ public class DeviceFragment extends Fragment {
         // 初始化BLEUnicastConnectionMaintainer
         // 必须这样做才能使SecureSignOnControllerble和Bleface完全正常工作）
         mBLEUnicastConnectionMaintainer = BLEUnicastConnectionMaintainer.getInstance();
-        mBLEUnicastConnectionMaintainer.initialize(getActivity());
+        mBLEUnicastConnectionMaintainer.initialize(
+
+                getActivity());
 
         // 初始化SignOnControllerBLE
         mSignOnBasicControllerBLE = SignOnBasicControllerBLE.getInstance();
@@ -251,7 +295,8 @@ public class DeviceFragment extends Fragment {
             KSpubCertificateDevice1.setContent(
                     new Blob(asnEncodeRawECPublicKeyBytes(Constant.BOOTSTRAP_ECC_PUBLIC_NO_POINT_IDENTIFIER))
             );
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
 
@@ -267,7 +312,8 @@ public class DeviceFragment extends Fragment {
             KSpubCertificateDevice2.setContent(
                     new Blob(asnEncodeRawECPublicKeyBytes(Constant.BOOTSTRAP_ECC_PUBLIC_NO_POINT_IDENTIFIER))
             );
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
 
@@ -356,16 +402,16 @@ public class DeviceFragment extends Fragment {
                             case R.id.only_controller: // 只能控制自己
                                 Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
                                 SendInterestTaskV2 SITask = new SendInterestTaskV2();
-                                Log.i(TAG, "onMenuItemClick: constructed name is:"+ commandInterest1.toString());
+                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
                                 SITask.execute(commandInterest1); // 开启子线程发送兴趣包
-                                Toast.makeText(getContext(), "开始转变策略：Controller",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.all_node: // 能相互控制
                                 Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
                                 SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
-                                Log.i(TAG, "onMenuItemClick: constructed name is:"+ commandInterest2.toString());
+                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
                                 SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
-                                Toast.makeText(getContext(), "开始转变策略：All node",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
                                 break;
                             default:
                         }
@@ -616,7 +662,7 @@ public class DeviceFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            Log.i(TAG,"SendInterestTaskV2 : onPreExecute ");
+            Log.i(TAG, "SendInterestTaskV2 : onPreExecute ");
         }
 
         @Override
@@ -629,10 +675,22 @@ public class DeviceFragment extends Fragment {
             Interest pendingInterest = new Interest(names[0]);
 
             try {
-                m_bleFace.expressInterest(pendingInterest, incomingData);
+                m_bleFace.expressInterest(pendingInterest, new OnData() {
+                    @Override
+                    public void onData(Interest interest, Data data) {
+                        Log.i(TAG, "获取数据包：" + data.getName().toUri());
+                        String msg = data.getContent().toString();
+                        // Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
+                        if (msg.length() == 0) {
+                            Log.i(TAG, "数据包为空");
+                        } else if (msg.length() > 0) {
+                            comebackData.setContent(data.getContent());
+                        }
+                    }
+                });
                 m_bleFace.processEvents();
                 Thread.sleep(50);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return false;
@@ -653,12 +711,12 @@ public class DeviceFragment extends Fragment {
         private class IncomingData implements OnData {
             @Override
             public void onData(Interest interest, Data data) {
-                Log.i(TAG,"获取数据包：" + data.getName().toUri());
+                Log.i(TAG, "获取数据包：" + data.getName().toUri());
                 String msg = data.getContent().toString();
-                Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
-                if (msg.length() == 0){
+                // Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
+                if (msg.length() == 0) {
                     Log.i(TAG, "数据包为空");
-                }else if (msg.length() > 0){
+                } else if (msg.length() > 0) {
                     comebackData.setContent(data.getContent());
                 }
             }
