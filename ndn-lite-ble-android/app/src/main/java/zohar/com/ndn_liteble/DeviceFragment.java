@@ -52,7 +52,9 @@ import net.named_data.jndn.util.Blob;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import NDNLiteSupport.BLEFace.BLEFace;
 import NDNLiteSupport.BLEUnicastConnectionMaintainer.BLEUnicastConnectionMaintainer;
@@ -142,6 +144,7 @@ public class DeviceFragment extends Fragment {
      */
     private void ndnLiteMainMethod() {
 
+
         // 显示加载界面
         showLoadingView(true);
 
@@ -161,6 +164,8 @@ public class DeviceFragment extends Fragment {
             @Override
             public void onDeviceSignOnComplete(String deviceIdentifierHexString) {
 
+                // 判断当前数据是否已经添加过了
+                boolean isAddFlag = false;
                 Log.i(TAG, "Onboarding was successful for device with device identifier hex string : " +
                         deviceIdentifierHexString);
                 Log.i(TAG, "Mac address of device succesfully onboarded: " +
@@ -175,15 +180,28 @@ public class DeviceFragment extends Fragment {
                 board.setMacAddress(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString));
                 board.setIdentifierHex(deviceIdentifierHexString);
                 board.setKDPubCertificate(mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString).getName().toUri());
-                boards.add(board);
-                // 更新UI
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boardAdapter.notifyItemInserted(boards.size() - 1); // 刷新recyclerview要显示的位置
-                        mRecycleNode.scrollToPosition(boards.size() - 1); // 将recyclerview定位到最后一个位置
+
+                for (Board temp : boards){
+                    if (temp.getIdentifierHex().equals(board.getIdentifierHex())){
+                        isAddFlag = true;
+                        break;
                     }
-                });
+                }
+
+                // 如果没有添加过，那么添加到List中
+                if (!isAddFlag){
+                    boards.add(board);
+                    // 更新UI
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            boardAdapter.notifyItemInserted(boards.size() - 1); // 刷新recyclerview要显示的位置
+                            mRecycleNode.scrollToPosition(boards.size() - 1); // 将recyclerview定位到最后一个位置
+                        }
+                    });
+                }
+
+
 
 
                 // Create a BLE face to the device that onboarding completed successfully for.
