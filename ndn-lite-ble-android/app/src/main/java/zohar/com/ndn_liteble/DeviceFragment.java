@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -65,8 +66,6 @@ public class DeviceFragment extends Fragment {
 
     private static final String TAG = "DeviceFragment";
 
-    // 主界面现实的内容
-    private TextView m_log;
     // fragment主界面View
     private View view;
     // BLE是否开启布局容器
@@ -240,8 +239,7 @@ public class DeviceFragment extends Fragment {
             }
 
             @Override
-            public void onDeviceSignOnError(String
-                                                    deviceIdentifierHexString, SignOnControllerResultCodes.SignOnControllerResultCode resultCode) {
+            public void onDeviceSignOnError(String deviceIdentifierHexString, SignOnControllerResultCodes.SignOnControllerResultCode resultCode) {
                 // 设备SignOn失败
                 if (deviceIdentifierHexString != null) {
                     Log.i(TAG, "设备SigOn错误: " + deviceIdentifierHexString +
@@ -252,9 +250,7 @@ public class DeviceFragment extends Fragment {
                             "SignOnControllerResultCode: " + resultCode);
                 }
             }
-        }
-
-        ;
+        };
 
 
         NDNLiteSupportInit.NDNLiteSupportInit();
@@ -264,9 +260,7 @@ public class DeviceFragment extends Fragment {
         // 初始化BLEUnicastConnectionMaintainer
         // 必须这样做才能使SecureSignOnControllerble和Bleface完全正常工作）
         mBLEUnicastConnectionMaintainer = BLEUnicastConnectionMaintainer.getInstance();
-        mBLEUnicastConnectionMaintainer.initialize(
-
-                getActivity());
+        mBLEUnicastConnectionMaintainer.initialize(getActivity());
 
         // 初始化SignOnControllerBLE
         mSignOnBasicControllerBLE = SignOnBasicControllerBLE.getInstance();
@@ -296,8 +290,7 @@ public class DeviceFragment extends Fragment {
             KSpubCertificateDevice2.setContent(
                     new Blob(asnEncodeRawECPublicKeyBytes(Constant.BOOTSTRAP_ECC_PUBLIC_NO_POINT_IDENTIFIER))
             );
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -308,21 +301,6 @@ public class DeviceFragment extends Fragment {
                 Constant.SECURE_SIGN_ON_CODE);
     }
 
-    private void logMessage(String TAG, String msg) {
-        Log.d(TAG, msg);
-        logMessageUI(TAG, msg);
-    }
-
-    private void logMessageUI(final String TAG, final String msg) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                m_log.append(TAG + ":" + "\n");
-                m_log.append(msg + "\n");
-                m_log.append("------------------------------" + "\n");
-            }
-        });
-    }
 
     /**
      * 请求位置权限
@@ -349,6 +327,7 @@ public class DeviceFragment extends Fragment {
      * 初始化事件
      */
     private void initEvent() {
+
         // 悬浮按钮
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,15 +359,14 @@ public class DeviceFragment extends Fragment {
                         }
                         Log.i(TAG, "当前板子的id" + currentBoardId);
                         switch (item.getItemId()) {
-
                             case R.id.only_controller: // 只能控制自己
                                 Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
                                 Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
-                                if (currentBoardId == 1){
+                                if (currentBoardId == 1) {
                                     // 第一块板子
                                     SendInterestTaskV2 SITask = new SendInterestTaskV2();
                                     SITask.execute(commandInterest1); // 开启子线程发送兴趣包
-                                }else if (currentBoardId == 2){
+                                } else if (currentBoardId == 2) {
                                     // 第二块板子
                                     SendInterestTaskV3 SITask = new SendInterestTaskV3();
                                     SITask.execute(commandInterest1);
@@ -398,10 +376,10 @@ public class DeviceFragment extends Fragment {
                             case R.id.all_node: // 能相互控制
                                 Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
                                 Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
-                                if (currentBoardId == 1){
+                                if (currentBoardId == 1) {
                                     SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
                                     SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
-                                }else if (currentBoardId == 2){
+                                } else if (currentBoardId == 2) {
                                     SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
                                     SITask2.execute(commandInterest2);
                                 }
@@ -418,13 +396,44 @@ public class DeviceFragment extends Fragment {
                 popupMenu.show();
             }
         });
+
+        // switch事件
+        boardAdapter.setOnClickSwitchListener(new BoardAdapter.OnClickSwitchListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int position) {
+                Board board = boards.get(position);
+                // 获取当前点击的实例
+                int currentBoardId;
+
+                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
+                    currentBoardId = 1;
+                } else {
+                    currentBoardId = 2;
+                }
+                Log.i(TAG, "当前板子的id：" + currentBoardId);
+                Name commandInterest;
+                if (currentBoardId == 1){
+                    if (isChecked){ // 当前状态时关闭，那么就要发送开启的命令
+                        commandInterest = new Name("/NDN-IoT/Board1/SD_LED/ON");
+                        SendInterestTaskV2 sendInterestTaskV2 = new SendInterestTaskV2();
+                        sendInterestTaskV2.execute(commandInterest);
+                    }else{
+                        //commandInterest = new Name("/NDN-IoT/Board1/SD_LED/OFF");
+                    }
+                }
+                if (currentBoardId == 2){
+                    commandInterest = new Name("/NDN-IoT/Board2/SD_LED/ON");
+                    SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
+                    sendInterestTaskV3.execute(commandInterest);
+                }
+            }
+        });
     }
 
     /**
      * 初始化UI控件
      */
     private void initUIView() {
-        m_log = view.findViewById(R.id.ui_log);
         mLoadingView = view.findViewById(R.id.cl_loading_device);
 
         mBleView = view.findViewById(R.id.ble_check_constraint);
@@ -492,10 +501,7 @@ public class DeviceFragment extends Fragment {
                 }
             });
         } else {
-            // 如果蓝牙已经打开了
-            // 1. 启用加载加界面
-            showLoadingView(true);
-            // 2. 开启ndn-lite方法
+            // 如果蓝牙已经打开了，开启ndn-lite方法
             ndnLiteMainMethod();
         }
 
@@ -560,7 +566,7 @@ public class DeviceFragment extends Fragment {
                 break;
             case R.id.toolbar_refresh: // 刷新
                 boards.clear();
-                mRecycleNode.setVisibility(View.INVISIBLE);
+                mRecycleNode.setVisibility(View.GONE);
                 ndnLiteMainMethod();
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
@@ -670,21 +676,8 @@ public class DeviceFragment extends Fragment {
             IncomingData incomingData = new IncomingData();
 
             Interest pendingInterest = new Interest(names[0]);
-
             try {
-                m_bleFace.expressInterest(pendingInterest, new OnData() {
-                    @Override
-                    public void onData(Interest interest, Data data) {
-                        Log.i(TAG, "获取数据包：" + data.getName().toUri());
-                        String msg = data.getContent().toString();
-                        // Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
-                        if (msg.length() == 0) {
-                            Log.i(TAG, "数据包为空");
-                        } else if (msg.length() > 0) {
-                            comebackData.setContent(data.getContent());
-                        }
-                    }
-                });
+                m_bleFace.expressInterest(pendingInterest, incomingData);
                 m_bleFace.processEvents();
                 Thread.sleep(50);
             } catch (Exception e) {
@@ -710,7 +703,7 @@ public class DeviceFragment extends Fragment {
             public void onData(Interest interest, Data data) {
                 Log.i(TAG, "获取数据包：" + data.getName().toUri());
                 String msg = data.getContent().toString();
-                // Toast.makeText(getContext(), "收到的数据包: " + msg, Toast.LENGTH_SHORT).show();
+                Log.i( TAG, "收到的数据包: " + msg);
                 if (msg.length() == 0) {
                     Log.i(TAG, "数据包为空");
                 } else if (msg.length() > 0) {
@@ -721,9 +714,9 @@ public class DeviceFragment extends Fragment {
 
     }
 
-    public class SendInterestTaskV3 extends AsyncTask<Name, Integer, Boolean>{
+    public class SendInterestTaskV3 extends AsyncTask<Name, Integer, Boolean> {
 
-        Data comeBackData=new Data();
+        Data comeBackData = new Data();
 
         @Override
         protected void onPreExecute() {
@@ -736,11 +729,11 @@ public class DeviceFragment extends Fragment {
             Log.i(TAG, "SendInterestTaskV3 - doInBackground - names ->" + names[0].toUri());
             Interest pendingInterest = new Interest(names[0]);
             incomingData incomD = new incomingData();
-            try{
+            try {
                 m_bleFace2.expressInterest(pendingInterest, incomD);
                 m_bleFace2.processEvents();
                 Thread.sleep(50);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
@@ -757,20 +750,10 @@ public class DeviceFragment extends Fragment {
             super.onPostExecute(aBoolean);
         }
 
-        private class incomingData implements OnData{
-//        @Override
-//        public void onNetworkNack(Interest interest, NetworkNack networkNack) {
-//            Log.i(TAG, "networkNack for interest:" + interest.getName().toUri());
-//            Log.i(TAG, "networkNack:" + networkNack.toString());
-//        }
-//
-//        @Override
-//        public void onTimeout(Interest interest) {
-//            Log.i(TAG, "Time out for interest:" + interest.getName().toUri());
-//        }
-
+        private class incomingData implements OnData {
             @Override
             public void onData(Interest interest, Data data) {
+                Log.i(TAG, "接受数据包");
                 Log.i(TAG, "Got data packet with name:" + data.getName().toUri());
                 String msg = data.getContent().toString();
                 Log.i(TAG, "onData: " + msg);

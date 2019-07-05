@@ -1,35 +1,19 @@
 package zohar.com.ndn_liteble.adapter;
 
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import net.named_data.jndn.Data;
-import net.named_data.jndn.Interest;
-import net.named_data.jndn.Name;
-import net.named_data.jndn.OnData;
-
-
-import java.io.IOException;
 import java.util.List;
 
-import NDNLiteSupport.BLEFace.BLEFace;
-import zohar.com.ndn_liteble.DeviceFragment;
 import zohar.com.ndn_liteble.R;
 import zohar.com.ndn_liteble.model.Board;
-import zohar.com.ndn_liteble.utils.Constant;
-import zohar.com.ndn_liteble.utils.SendInterestTask;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
 
@@ -38,9 +22,26 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     // 填充的数据
     private List<Board> boards;
 
+    // 点击图片的监听事件
     private OnClickBoardImageListener clickBoardImageListener;
+    // 点击switch的监听事件
+    private OnClickSwitchListener onClickSwitchListener;
 
+    /**
+     * interface: switch开关监听事件
+     */
+    public interface OnClickSwitchListener{
+        void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int position);
+    }
 
+    public void setOnClickSwitchListener(OnClickSwitchListener onClickSwitchListener){
+        this.onClickSwitchListener = onClickSwitchListener;
+    }
+
+    /**
+     *
+     * interface ： 图片点击监听事件
+     */
     public interface OnClickBoardImageListener{
          void onClickBoardImageListener(View view, Board board);
     }
@@ -76,10 +77,14 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     public BoardAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_board_node, viewGroup, false);
         final ViewHolder holder = new ViewHolder(view);
+
+
         holder.ledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                // 获取当前点击的实例
+                int position = holder.getAdapterPosition();
+                onClickSwitchListener.onCheckedChanged(buttonView,isChecked,position);
             }
         });
 
@@ -87,10 +92,10 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         holder.ivBoard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
                 // 获取当前点击的实例
                 int position = holder.getAdapterPosition();
                 Board board = boards.get(position);
+
                 clickBoardImageListener.onClickBoardImageListener(v, board);
 
             }
@@ -103,9 +108,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHoder, int i) {
         Board board = boards.get(i);
-        viewHoder.macAddress.setText(board.getMacAddress());
-        viewHoder.identifier.setText(board.getIdentifierHex());
-        viewHoder.kbpub.setText(board.getKDPubCertificate());
+        if (board != null) {
+            viewHoder.macAddress.setText(board.getMacAddress());
+            viewHoder.identifier.setText(board.getIdentifierHex());
+            viewHoder.kbpub.setText(board.getKDPubCertificate());
+        }
     }
 
     @Override

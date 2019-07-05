@@ -19,13 +19,6 @@
         android:id="@+id/recycle_show_node_device"/>
 
 
-    <TextView
-        android:id="@+id/ui_log"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="216dp" />
-
     <!--悬浮按钮-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floating_button_main_activity"
