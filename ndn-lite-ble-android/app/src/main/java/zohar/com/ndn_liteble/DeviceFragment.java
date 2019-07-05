@@ -135,7 +135,6 @@ public class DeviceFragment extends Fragment {
      */
     private void ndnLiteMainMethod() {
 
-
         // 显示加载界面
         showLoadingView(true);
 
@@ -228,28 +227,13 @@ public class DeviceFragment extends Fragment {
                             onInterest);
                 } else
                     Log.i(TAG, "onDeviceSignOnComplete: wrong device identifier...");
-//                m_bleFace = new BLEFace(mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString),
-//                        onInterest);
-
-//                Interest test_interest = new Interest(new Name("/phone/test/interest"));
-//                test_interest.setChildSelector(-1);
-//
-//                // LogHelpers.LogByteArrayDebug(TAG, "test_interest_bytes: ", test_interest.wireEncode().getImmutableArray());
-//
-//                m_bleFace.expressInterest(test_interest, new
-//
-//                        OnData() {
-//                            @Override
-//                            public void onData(Interest interest, Data data) {
-//                                logMessage(TAG, "Received data in response to test interest sent to device with device identifier: ");
-//                            }
-//                        });
 
                 // 隐藏加载界面
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showLoadingView(false);
+                        mRecycleNode.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -376,7 +360,7 @@ public class DeviceFragment extends Fragment {
         //板子点击的图片
         boardAdapter.setOnClickBoardImageListener(new BoardAdapter.OnClickBoardImageListener() {
             @Override
-            public void onClickBoardImageListener(View v, final int position) {
+            public void onClickBoardImageListener(View v, final Board board) {
                 // 创建popup menu
                 final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
                 // 添加布局
@@ -387,30 +371,40 @@ public class DeviceFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
 
                         // 获取当前点击的实例
-                        Board board = boards.get(position);
                         int currentBoardId;
 
-                        Toast.makeText(getContext(), "点击了" + position, Toast.LENGTH_SHORT).show();
-
-                        if (board.getIdentifierHex().equals(Constant.DEVICE_IDENTIFIER_1)) {
+                        if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
                             currentBoardId = 1;
                         } else {
                             currentBoardId = 2;
                         }
-
+                        Log.i(TAG, "当前板子的id" + currentBoardId);
                         switch (item.getItemId()) {
+
                             case R.id.only_controller: // 只能控制自己
                                 Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
-                                SendInterestTaskV2 SITask = new SendInterestTaskV2();
                                 Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
-                                SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+                                if (currentBoardId == 1){
+                                    // 第一块板子
+                                    SendInterestTaskV2 SITask = new SendInterestTaskV2();
+                                    SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+                                }else if (currentBoardId == 2){
+                                    // 第二块板子
+                                    SendInterestTaskV3 SITask = new SendInterestTaskV3();
+                                    SITask.execute(commandInterest1);
+                                }
                                 Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.all_node: // 能相互控制
                                 Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
-                                SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
                                 Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
-                                SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+                                if (currentBoardId == 1){
+                                    SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
+                                    SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+                                }else if (currentBoardId == 2){
+                                    SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
+                                    SITask2.execute(commandInterest2);
+                                }
                                 Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
                                 break;
                             default:
@@ -565,6 +559,9 @@ public class DeviceFragment extends Fragment {
                 requestCameraPermission();
                 break;
             case R.id.toolbar_refresh: // 刷新
+                boards.clear();
+                mRecycleNode.setVisibility(View.INVISIBLE);
+                ndnLiteMainMethod();
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
                 startCreateQRActivity();
@@ -722,6 +719,67 @@ public class DeviceFragment extends Fragment {
             }
         }
 
+    }
 
+    public class SendInterestTaskV3 extends AsyncTask<Name, Integer, Boolean>{
+
+        Data comeBackData=new Data();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(Name... names) {
+
+            Log.i(TAG, "SendInterestTaskV3 - doInBackground - names ->" + names[0].toUri());
+            Interest pendingInterest = new Interest(names[0]);
+            incomingData incomD = new incomingData();
+            try{
+                m_bleFace2.expressInterest(pendingInterest, incomD);
+                m_bleFace2.processEvents();
+                Thread.sleep(50);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+        }
+
+        private class incomingData implements OnData{
+//        @Override
+//        public void onNetworkNack(Interest interest, NetworkNack networkNack) {
+//            Log.i(TAG, "networkNack for interest:" + interest.getName().toUri());
+//            Log.i(TAG, "networkNack:" + networkNack.toString());
+//        }
+//
+//        @Override
+//        public void onTimeout(Interest interest) {
+//            Log.i(TAG, "Time out for interest:" + interest.getName().toUri());
+//        }
+
+            @Override
+            public void onData(Interest interest, Data data) {
+                Log.i(TAG, "Got data packet with name:" + data.getName().toUri());
+                String msg = data.getContent().toString();
+                Log.i(TAG, "onData: " + msg);
+                if (msg.length() == 0) {
+                    Log.i(TAG, "Data is null");
+                } else if (msg.length() > 0) {
+                    comeBackData.setContent(data.getContent());
+                }
+            }
+        }
     }
 }

@@ -42,7 +42,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
 
 
     public interface OnClickBoardImageListener{
-         void onClickBoardImageListener(View view, int position);
+         void onClickBoardImageListener(View view, Board board);
     }
 
     public void setOnClickBoardImageListener(OnClickBoardImageListener clickBoardImageListener){
@@ -90,8 +90,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
 
                 // 获取当前点击的实例
                 int position = holder.getAdapterPosition();
-
-                clickBoardImageListener.onClickBoardImageListener(v, position);
+                Board board = boards.get(position);
+                clickBoardImageListener.onClickBoardImageListener(v, board);
 
             }
         });

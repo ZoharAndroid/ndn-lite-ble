@@ -11,8 +11,8 @@
     <!--刷新-->
     <item android:id="@+id/toolbar_refresh"
         android:title="@string/refresh"
-        android:icon="@mipmap/toolbar_refresh"
-        app:showAsAction="never" />
+        android:icon="@mipmap/ic_refresh"
+        app:showAsAction="ifRoom" />
 
     <item android:id="@+id/create_qr_toolbar"
         android:title="生成二维码"
