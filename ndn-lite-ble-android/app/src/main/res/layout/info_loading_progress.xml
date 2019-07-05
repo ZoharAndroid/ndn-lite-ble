@@ -38,4 +38,14 @@
         android:textColor="@color/colortext"
         android:textSize="18sp" />
 
+    <TextView
+        android:layout_marginBottom="10dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="注意：\n  长时间等待，请先确保板子的正常运行（重启/开关电源）!"
+        android:textColor="@color/colortextdark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </android.support.constraint.ConstraintLayout>

@@ -146,7 +146,7 @@ public class DeviceFragment extends Fragment {
                 Log.i(TAG, "onInterest()回调, interest的前缀为: " + prefix.toUri());
                 // 如果interest的是board1
                 if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString)) {
-                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
+                    Log.i(TAG, "onInterest - Got interest for certificate of device with device identifier: " +
                             m_expectedDeviceIdentifierHexString);
 
                     try {
@@ -159,10 +159,10 @@ public class DeviceFragment extends Fragment {
 
                 //  如果interest回调会board2
                 if (prefix.toUri().equals(KD_PUB_CERTIFICATE_NAME_PREFIX + m_expectedDeviceIdentifierHexString2)) {
-                    Log.i(TAG, "Got interest for certificate of device with device identifier: " +
+                    Log.i(TAG, "onInterest - Got interest for certificate of device with device identifier: " +
                             m_expectedDeviceIdentifierHexString2);
                     try {
-                        Log.i(TAG, "Responding to interest from device with its certificate...");
+                        Log.i(TAG, "onInterest - Responding to interest from device with its certificate...");
                         face.putData(SignOnBasicControllerBLE.getInstance().getKDPubCertificateOfDevice(m_expectedDeviceIdentifierHexString2));
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -180,11 +180,11 @@ public class DeviceFragment extends Fragment {
 
                 // 判断当前数据是否已经添加过了
                 boolean isAddFlag = false;
-                Log.i(TAG, "Onboarding was successful for device with device identifier hex string : " +
+                Log.i(TAG, "onDeviceSignOnComplete - Onboarding was successful for device with device identifier hex string : " +
                         deviceIdentifierHexString);
-                Log.i(TAG, "Mac address of device succesfully onboarded: " +
+                Log.i(TAG, "onDeviceSignOnComplete - Mac address of device succesfully onboarded: " +
                         mSignOnBasicControllerBLE.getMacAddressOfDevice(deviceIdentifierHexString));
-                Log.i(TAG, "Name of device's KDPubCertificate: " +
+                Log.i(TAG, "onDeviceSignOnComplete - Name of device's KDPubCertificate: " +
                         mSignOnBasicControllerBLE.getKDPubCertificateOfDevice(deviceIdentifierHexString)
                                 .getName().toUri()
                 );
@@ -418,13 +418,19 @@ public class DeviceFragment extends Fragment {
                         SendInterestTaskV2 sendInterestTaskV2 = new SendInterestTaskV2();
                         sendInterestTaskV2.execute(commandInterest);
                     }else{
-                        //commandInterest = new Name("/NDN-IoT/Board1/SD_LED/OFF");
+                        commandInterest = new Name("/NDN-IoT/Board1/LED/OFF");
                     }
                 }
-                if (currentBoardId == 2){
-                    commandInterest = new Name("/NDN-IoT/Board2/SD_LED/ON");
-                    SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
-                    sendInterestTaskV3.execute(commandInterest);
+                if (currentBoardId == 2) {
+                    if (isChecked) {
+                        commandInterest = new Name("/NDN-IoT/Board2/SD_LED/ON_A");
+                        SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
+                        sendInterestTaskV3.execute(commandInterest);
+                    }else{
+                        commandInterest = new Name("/NDN-IoT/Board2/SD_LED/OFF");
+                        SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
+                        sendInterestTaskV3.execute(commandInterest);
+                    }
                 }
             }
         });
@@ -565,9 +571,10 @@ public class DeviceFragment extends Fragment {
                 requestCameraPermission();
                 break;
             case R.id.toolbar_refresh: // 刷新
-                boards.clear();
-                mRecycleNode.setVisibility(View.GONE);
-                ndnLiteMainMethod();
+//                boards.clear();
+//                mRecycleNode.setVisibility(View.GONE);
+//                ndnLiteMainMethod();
+                Toast.makeText(getContext(),"Todo：刷新", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
                 startCreateQRActivity();
