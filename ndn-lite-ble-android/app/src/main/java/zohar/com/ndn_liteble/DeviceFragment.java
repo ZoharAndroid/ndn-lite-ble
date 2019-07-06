@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,6 +43,7 @@ import net.named_data.jndn.InterestFilter;
 import net.named_data.jndn.Name;
 import net.named_data.jndn.OnData;
 import net.named_data.jndn.OnInterestCallback;
+import net.named_data.jndn.OnTimeout;
 import net.named_data.jndn.security.v2.CertificateV2;
 import net.named_data.jndn.util.Blob;
 
@@ -413,22 +415,26 @@ public class DeviceFragment extends Fragment {
                 Log.i(TAG, "当前板子的id：" + currentBoardId);
                 Name commandInterest;
                 if (currentBoardId == 1){
+                    SendInterestTaskV2 sendInterestTaskV2;
                     if (isChecked){ // 当前状态时关闭，那么就要发送开启的命令
-                        commandInterest = new Name("/NDN-IoT/Board1/SD_LED/ON");
-                        SendInterestTaskV2 sendInterestTaskV2 = new SendInterestTaskV2();
+                        commandInterest = new Name("/NDN-IoT/Board1/LED/ON");
+                        sendInterestTaskV2 = new SendInterestTaskV2();
                         sendInterestTaskV2.execute(commandInterest);
                     }else{
                         commandInterest = new Name("/NDN-IoT/Board1/LED/OFF");
+                        sendInterestTaskV2 = new SendInterestTaskV2();
+                        sendInterestTaskV2.execute(commandInterest);
                     }
                 }
                 if (currentBoardId == 2) {
+                    SendInterestTaskV3 sendInterestTaskV3;
                     if (isChecked) {
-                        commandInterest = new Name("/NDN-IoT/Board2/SD_LED/ON_A");
-                        SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
+                        commandInterest = new Name("/NDN-IoT/Board2/LED/ON");
+                         sendInterestTaskV3 = new SendInterestTaskV3();
                         sendInterestTaskV3.execute(commandInterest);
                     }else{
-                        commandInterest = new Name("/NDN-IoT/Board2/SD_LED/OFF");
-                        SendInterestTaskV3 sendInterestTaskV3 = new SendInterestTaskV3();
+                        commandInterest = new Name("/NDN-IoT/Board2/LED/OFF");
+                        sendInterestTaskV3 = new SendInterestTaskV3();
                         sendInterestTaskV3.execute(commandInterest);
                     }
                 }
@@ -703,7 +709,7 @@ public class DeviceFragment extends Fragment {
         /**
          * 回来的数据包
          */
-        private class IncomingData implements OnData {
+        private class IncomingData implements OnData,OnTimeout {
             @Override
             public void onData(Interest interest, Data data) {
                 Log.i(TAG, "获取数据包：" + data.getName().toUri());
@@ -714,6 +720,11 @@ public class DeviceFragment extends Fragment {
                 } else if (msg.length() > 0) {
                     comebackData.setContent(data.getContent());
                 }
+            }
+
+            @Override
+            public void onTimeout(Interest interest) {
+                Log.i(TAG, "SendInterestTaskV3 - incomingData - onTimeout -> " + interest.toUri());
             }
         }
 
@@ -755,7 +766,7 @@ public class DeviceFragment extends Fragment {
             super.onPostExecute(aBoolean);
         }
 
-        private class incomingData implements OnData {
+        private class incomingData implements OnData, OnTimeout {
             @Override
             public void onData(Interest interest, Data data) {
                 Log.i(TAG, "接受数据包");
@@ -767,6 +778,11 @@ public class DeviceFragment extends Fragment {
                 } else if (msg.length() > 0) {
                     comeBackData.setContent(data.getContent());
                 }
+            }
+
+            @Override
+            public void onTimeout(Interest interest) {
+                Log.i(TAG, "SendInterestTaskV3 - incomingData - onTimeout -> " + interest.toUri());
             }
         }
     }
