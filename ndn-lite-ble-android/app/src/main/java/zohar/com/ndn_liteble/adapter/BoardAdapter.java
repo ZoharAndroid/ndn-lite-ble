@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     private OnClickBoardImageListener clickBoardImageListener;
     // 点击switch的监听事件
     private OnClickSwitchListener onClickSwitchListener;
+    // 点击radiogroup
+    private OnCheckedChangeListener onCheckedChangeListener;
 
     /**
      * interface: switch开关监听事件
@@ -36,6 +39,15 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
 
     public void setOnClickSwitchListener(OnClickSwitchListener onClickSwitchListener){
         this.onClickSwitchListener = onClickSwitchListener;
+    }
+
+    // radiogroup
+    public interface OnCheckedChangeListener{
+        void onCheckedChanged(RadioGroup group, int checkedId, int position);
+    }
+
+    public void setOnCheckedChangeListener (OnCheckedChangeListener onCheckedChangeListener){
+        this.onCheckedChangeListener = onCheckedChangeListener;
     }
 
     /**
@@ -61,6 +73,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         TextView kbpub;
         Switch ledSwitch;
         ImageView ivBoard;
+        RadioGroup radioGroup;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +82,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             kbpub = itemView.findViewById(R.id.tv_kdpub);
             ledSwitch = itemView.findViewById(R.id.switch_led);
             ivBoard = itemView.findViewById(R.id.iv_board);
+            radioGroup = itemView.findViewById(R.id.rg_policy_select);
         }
     }
 
@@ -98,6 +112,15 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
 
                 clickBoardImageListener.onClickBoardImageListener(v, board);
 
+            }
+        });
+
+        holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // 获取当前点击的实例
+                int position = holder.getAdapterPosition();
+                onCheckedChangeListener.onCheckedChanged(group,checkedId, position);
             }
         });
 

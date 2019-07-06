@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ import NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerResu
 import zohar.com.ndn_liteble.adapter.BoardAdapter;
 import zohar.com.ndn_liteble.model.Board;
 import zohar.com.ndn_liteble.utils.Constant;
+import zohar.com.ndn_liteble.utils.SendInterestTaskV2;
 
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerConsts.KD_PUB_CERTIFICATE_NAME_PREFIX;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.secureSignOnVariants.SecureSignOnVariantStrings.SIGN_ON_VARIANT_BASIC_ECC_256;
@@ -338,6 +340,52 @@ public class DeviceFragment extends Fragment {
             }
         });
 
+        // RadioGroup选择
+        boardAdapter.setOnCheckedChangeListener(new BoardAdapter.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId, int position) {
+
+                // 获取当前点击的实例
+                int currentBoardId;
+                Board board = boards.get(position);
+                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
+                    currentBoardId = 1;
+                } else {
+                    currentBoardId = 2;
+                }
+                Log.i(TAG, "当前板子的id" + currentBoardId);
+                switch (checkedId) {
+                    case R.id.rb_only_controller: // 只能控制自己
+                        Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
+                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
+                        if (currentBoardId == 1) {
+                            // 第一块板子
+                            SendInterestTaskV2 SITask = new SendInterestTaskV2();
+                            SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+                        } else if (currentBoardId == 2) {
+                            // 第二块板子
+                            SendInterestTaskV3 SITask = new SendInterestTaskV3();
+                            SITask.execute(commandInterest1);
+                        }
+                        Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.rb_all_node: // 能相互控制
+                        Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
+                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
+                        if (currentBoardId == 1) {
+                            SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
+                            SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+                        } else if (currentBoardId == 2) {
+                            SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
+                            SITask2.execute(commandInterest2);
+                        }
+                        Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                }
+            }
+        });
+
         //板子点击的图片
         boardAdapter.setOnClickBoardImageListener(new BoardAdapter.OnClickBoardImageListener() {
             @Override
@@ -440,6 +488,7 @@ public class DeviceFragment extends Fragment {
                 }
             }
         });
+
     }
 
     /**
@@ -447,7 +496,6 @@ public class DeviceFragment extends Fragment {
      */
     private void initUIView() {
         mLoadingView = view.findViewById(R.id.cl_loading_device);
-
         mBleView = view.findViewById(R.id.ble_check_constraint);
         mStartBleButton = view.findViewById(R.id.btn_ble_open_main);
         mFloatingButton = view.findViewById(R.id.floating_button_main_activity);
