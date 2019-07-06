@@ -36,7 +36,7 @@
   - [4.1. 相关慨念](#41-%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
     - [4.1.1. BLE Mesh相关慨念](#411-BLE-Mesh%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
     - [4.1.2. nRF52 for Mesh体系结构](#412-nRF52-for-Mesh%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
-  - [4.2. 实例操作：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
+  - [4.2. 实战体验：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
     - [4.2.1. 硬件要求](#421-%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
     - [4.2.2. 软件要求](#422-%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
     - [4.2.3. 操作步骤](#423-%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
@@ -47,6 +47,20 @@
 - [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
   - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
   - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
+  - [5.3. 实战体验：含有信任策略切换功能的ndn-lite例子](#53-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8C%E5%90%AB%E6%9C%89%E4%BF%A1%E4%BB%BB%E7%AD%96%E7%95%A5%E5%88%87%E6%8D%A2%E5%8A%9F%E8%83%BD%E7%9A%84ndn-lite%E4%BE%8B%E5%AD%90)
+    - [5.3.1. 需求](#531-%E9%9C%80%E6%B1%82)
+    - [5.3.2. 效果](#532-%E6%95%88%E6%9E%9C)
+      - [5.3.2.1. 板子上电](#5321-%E6%9D%BF%E5%AD%90%E4%B8%8A%E7%94%B5)
+      - [5.3.2.2. sign on](#5322-sign-on)
+      - [5.3.2.3. 按下板子的Button1](#5323-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90%E7%9A%84Button1)
+      - [5.3.2.4. 按下板子Button2](#5324-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90Button2)
+      - [5.3.2.5. 按下板子Button3](#5325-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90Button3)
+      - [5.3.2.6. App上的LED开关按钮](#5326-App%E4%B8%8A%E7%9A%84LED%E5%BC%80%E5%85%B3%E6%8C%89%E9%92%AE)
+      - [5.3.2.7. App上的"Only Controller"和"All node"的选择](#5327-App%E4%B8%8A%E7%9A%84%22Only-Controller%22%E5%92%8C%22All-node%22%E7%9A%84%E9%80%89%E6%8B%A9)
+    - [5.3.3. 下载Android源代码](#533-%E4%B8%8B%E8%BD%BDAndroid%E6%BA%90%E4%BB%A3%E7%A0%81)
+    - [5.3.4. 修改nRF52840源代码](#534-%E4%BF%AE%E6%94%B9nRF52840%E6%BA%90%E4%BB%A3%E7%A0%81)
+      - [5.3.4.1. 添加开关灯的代码](#5341-%E6%B7%BB%E5%8A%A0%E5%BC%80%E5%85%B3%E7%81%AF%E7%9A%84%E4%BB%A3%E7%A0%81)
+      - [5.3.4.2. 修改on_CMDInterest代码](#5342-%E4%BF%AE%E6%94%B9onCMDInterest%E4%BB%A3%E7%A0%81)
 
 <!-- /TOC -->
   
@@ -486,7 +500,7 @@ Bluetooth Mesh采用多种安全措施来防止第三方干扰和监控：
 
 ![](https://github.com/ZoharAndroid/MarkdownImages/blob/master/2019-6-17/nRF52for_mesh.png?raw=true)
 
-## 4.2. 实例操作：nRF52上运行一个BLE Mesh的例子
+## 4.2. 实战体验：nRF52上运行一个BLE Mesh的例子
 
  本示例 light switch example 演示了mesh网络生态系统的主要部分。 它由三个部分组成：
 
@@ -630,3 +644,132 @@ ndn-lite系统结构图如下：
 * `./app-support`目录：访问控制、服务发现和其他可以促进应用程序开发的高级模块。
 * `./adaptation`目录：硬件/操作系统适配。当使用ndn-lite时，开发人员应该为他们的应用程序开发所使用的平台/OS选择一个或多个适配。
 
+## 5.3. 实战体验：含有信任策略切换功能的ndn-lite例子
+
+这个实战是基于第3部分的基础上来进行修改的，还是用nRF52840开发板上的实例程序，以及另外一个安卓App来实现这个操作。下面先看一下需要实现的需求和效果，来有个大致的印象。
+
+### 5.3.1. 需求
+
+这里用到的是两块nRF52840板子和一台安卓手机。
+
+这里需要提前了解有两种信任策略，一种是**Only controller**，一种是**All node**。**Only Controller**的意思就是用户不能通过按下按钮1或者从另一个板发送命令来打开LED 1。**All node**的意思就是相当于一个普通的节点，无论是谁发过来的任何相应的开关灯的interest包，只要正确都会进行响应。
+
+### 5.3.2. 效果
+
+<p align = "center">
+<img src="https://raw.githubusercontent.com/ZoharAndroid/MarkdownImages/master/2019-07/ndn-lite%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C.gif"/>
+
+</p>
+
+#### 5.3.2.1. 板子上电
+
+这个阶段两个nRF52840板子的LED3将会闪烁3次。这表示的板子正在进行初始化相关的工作。
+
+#### 5.3.2.2. sign on
+
+除了上电LED3闪烁以外，以后LED3每次闪烁3次都代表的是板子正在进行sign on阶段。
+
+#### 5.3.2.3. 按下板子的Button1
+
+在all node模式下，按下Button1，LED1会亮。在only controller模式下无反应。
+
+#### 5.3.2.4. 按下板子Button2
+
+在all node模式下，按下Buttion2，关闭LED1。
+
+#### 5.3.2.5. 按下板子Button3
+
+在all node模式下，按下其中一块板子的button3可以打开另外一块板子的LED1（LED1会闪烁3次）。如果对其中一块板子设置成了Only controller模式，另外一块板子为all node模式，那么设置成all node模式的那块板子按button3是对另外一块板子没有任何效果的，但是设置成only controller的那块板子按下button3对另外一块板子是有效果的（LED1会闪烁3次）。
+
+#### 5.3.2.6. App上的LED开关按钮
+
+打开App界面上的开关按钮，可以打开对应板子上的LED1，关闭App上界面的开关按钮，可以关闭LED1.
+
+#### 5.3.2.7. App上的"Only Controller"和"All node"的选择
+
+可以点击板子对应的图片上点击一下会弹出选项框，进行选择；也可以点击板子图片旁边的来选择其中一种策略，对应的板子LED3将会闪烁3次，之后LED4一直常亮，表示信任策略切换完毕。
+
+### 5.3.3. 下载Android源代码
+
+这个App源代码下载地址为：https://github.com/ZoharAndroid/ndn-lite-ble.git 。该库中的`/ndn-lite-ble-android`目录就是这个实例的android的源代码程序。
+
+然后用Android Studio导入这个ndn-lite-ble-android工程。然后编译运行安装到手机上。具体操作在前面章节已经说过，可以参考前面的章节的内容。
+
+当然，这个App还有未完成的功能，后续会继续添加。其中，如果遇到Bug，还请把情况反馈给我（Email：1048132071@qq.com或者github上的issues）。
+
+### 5.3.4. 修改nRF52840源代码
+
+这里也需要修改一下nRF52840源代码中的程序。
+
+用SES软件打开3.3节提到的nRF5程序源代码，然后进行如下修改。
+
+#### 5.3.4.1. 添加开关灯的代码
+
+在main函数外，添加on_led(index)和off_led(index)代码，用来开关对应的LED[index]。
+
+```c++
+// on led1
+static void on_led(int i){
+ const uint32_t pin = NRF_GPIO_PIN_MAP(0, 12 + i);
+ nrf_gpio_cfg_output(pin);
+ nrf_gpio_pin_write(pin, 0);
+}
+
+// off led1
+static void off_led(int i){
+ const uint32_t pin = NRF_GPIO_PIN_MAP(0, 12 + i);
+ nrf_gpio_cfg_output(pin);
+ nrf_gpio_pin_write(pin, 1);
+}
+```
+
+#### 5.3.4.2. 修改on_CMDInterest代码
+
+这里主要是添加对应的interst名称，然后对名字进行判定操作。
+
+```c++
+int on_CMDInterest(const uint8_t *interest, uint32_t interest_size) {
+  APP_LOG("Get into on_CMDInterest... Start to decode received Interest\n");
+  APP_LOG("interst -> %d, interest_size %d \n " , interest ,interest_size);
+  //initiate the name prefix of different interest here
+  ndn_name_t CMD_prefix;
+  ndn_name_t CMD_prefix_on;
+  ndn_name_t CMD_prefix_off;
+
+#ifdef BOARD_1
+  char CMD_string[] = "/NDN-IoT/Board1/SD_LED/ON";
+  char CMD_string_on[] = "/NDN-IoT/Board1/LED/ON";
+  char CMD_string_off[] = "/NDN-IoT/Board1/LED/OFF"; // off led
+#endif
+#ifdef BOARD_2
+  char CMD_string[] = "/NDN-IoT/Board2/SD_LED/ON"; // 闪烁
+  char CMD_string_on[] = "/NDN-IoT/Board2/LED/ON"; // on led
+  char CMD_string_off[] = "/NDN-IoT/Board2/LED/OFF"; // off led
+#endif
+  ndn_name_from_string(&CMD_prefix, CMD_string, sizeof(CMD_string));
+  ndn_name_from_string(&CMD_prefix_on, CMD_string_on, sizeof(CMD_string_on));
+  ndn_name_from_string(&CMD_prefix_off, CMD_string_off, sizeof(CMD_string_off)); 
+
+  ndn_interest_t check_interest;
+  int result = ndn_interest_from_block(&check_interest, interest, interest_size);
+  APP_LOG("compare results of SD_led ON: %d\n", ndn_name_compare(&CMD_prefix, &check_interest.name));
+  APP_LOG("compare results of led on: %d\n", ndn_name_compare(&CMD_prefix_on, &check_interest.name));
+  APP_LOG("compare results of led off: %d\n", ndn_name_compare(&CMD_prefix_off, &check_interest.name));
+
+  if (ndn_name_compare(&check_interest.name, &CMD_prefix) == 0) {
+    APP_LOG("Get into on_CMDtInterest... Received command to turn on LED\n");
+
+    if (schematrust_flag) {
+      blink_led(1);
+      APP_LOG("finish blink led 2");
+    }
+  }else if (ndn_name_compare(&check_interest.name, &CMD_prefix_on) == 0){
+    APP_LOG("Get cmdinterest to alwasy turn on LED\n");
+     on_led(1);
+  }else if(ndn_name_compare(&check_interest.name, &CMD_prefix_off) == 0){
+    APP_LOG("Get cmdinterest to alwasy turn off LED\n");
+    off_led(1);
+  }
+}
+
+```
