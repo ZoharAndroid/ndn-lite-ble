@@ -491,12 +491,10 @@ public class DeviceFragment extends Fragment {
             // 显示不可用界面
             mBleView.setVisibility(View.VISIBLE);
             mTvBle.setText("当前设备蓝牙不可用");
-            mTvBleNote.setVisibility(View.INVISIBLE);
-            mStartBleButton.setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        if (!bluetoothAdapter.isEnabled()) {
+            mTvBleNote.setVisibility(View.GONE);
+            mStartBleButton.setVisibility(View.GONE);
+            Log.i(TAG, "当前设备蓝牙不可用");
+        }else if (!bluetoothAdapter.isEnabled()) {
             mBleView.setVisibility(View.VISIBLE);
             // 当前蓝牙不可用，就去开启蓝牙
             mStartBleButton.setOnClickListener(new View.OnClickListener() {
