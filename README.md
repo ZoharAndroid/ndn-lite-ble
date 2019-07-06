@@ -1,68 +1,6 @@
 <h1>NDN-Lite-BLE操作参考指南</h1>
   
-<!-- TOC -->
-
-- [1. 初识ndn-lite](#1-%E5%88%9D%E8%AF%86ndn-lite)
-- [2. 前期准备：开发环境的搭建](#2-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA)
-  - [2.1. JDK和JRE的安装](#21-JDK%E5%92%8CJRE%E7%9A%84%E5%AE%89%E8%A3%85)
-    - [2.1.1. 下载JDK](#211-%E4%B8%8B%E8%BD%BDJDK)
-    - [2.1.2. 设置环境变量](#212-%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F)
-  - [2.2. Android Studio的安装配置](#22-Android-Studio%E7%9A%84%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE)
-    - [2.2.1. 下载AS和安装](#221-%E4%B8%8B%E8%BD%BDAS%E5%92%8C%E5%AE%89%E8%A3%85)
-    - [2.2.2. AS运行和配置](#222-AS%E8%BF%90%E8%A1%8C%E5%92%8C%E9%85%8D%E7%BD%AE)
-  - [2.3. Segger安装和配置](#23-Segger%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE)
-    - [2.3.1. 下载和安装SES](#231-%E4%B8%8B%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85SES)
-    - [2.3.2. 下载nRF5_SDK](#232-%E4%B8%8B%E8%BD%BDnRF5SDK)
-    - [2.3.3. 下载nRF5命令行工具](#233-%E4%B8%8B%E8%BD%BDnRF5%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7)
-    - [2.3.4. 测试是否成功](#234-%E6%B5%8B%E8%AF%95%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F)
-  - [2.4. 初识nRF52840板子](#24-%E5%88%9D%E8%AF%86nRF52840%E6%9D%BF%E5%AD%90)
-- [3. 实战体验：一个使用ndn-lite的应用示例](#3-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8C%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8ndn-lite%E7%9A%84%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B)
-  - [3.1. 需求介绍](#31-%E9%9C%80%E6%B1%82%E4%BB%8B%E7%BB%8D)
-  - [3.2. Andorid应用程序](#32-Andorid%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F)
-    - [3.2.1. 下载NDN-IoT-Android库](#321-%E4%B8%8B%E8%BD%BDNDN-IoT-Android%E5%BA%93)
-    - [3.2.2. 用Android Studio去打开这个Project](#322-%E7%94%A8Android-Studio%E5%8E%BB%E6%89%93%E5%BC%80%E8%BF%99%E4%B8%AAProject)
-    - [3.2.3. 编译运行App](#323-%E7%BC%96%E8%AF%91%E8%BF%90%E8%A1%8CApp)
-  - [3.3. nRF52840开发板程序](#33-nRF52840%E5%BC%80%E5%8F%91%E6%9D%BF%E7%A8%8B%E5%BA%8F)
-    - [3.3.1. 下载nRFProject到本地](#331-%E4%B8%8B%E8%BD%BDnRFProject%E5%88%B0%E6%9C%AC%E5%9C%B0)
-    - [3.3.2. 修改nRFProject中的SDK和ndn-lite路径](#332-%E4%BF%AE%E6%94%B9nRFProject%E4%B8%AD%E7%9A%84SDK%E5%92%8Cndn-lite%E8%B7%AF%E5%BE%84)
-    - [3.3.3. Build编译nRF52Project](#333-Build%E7%BC%96%E8%AF%91nRF52Project)
-      - [3.3.3.1. 找不到micro_ecc_lib_nrf52.a文件？](#3331-%E6%89%BE%E4%B8%8D%E5%88%B0microecclibnrf52a%E6%96%87%E4%BB%B6)
-  - [3.4. 实现效果](#34-%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C)
-    - [3.4.1. 将nRFProject分别烧录到nRF52840板](#341-%E5%B0%86nRFProject%E5%88%86%E5%88%AB%E7%83%A7%E5%BD%95%E5%88%B0nRF52840%E6%9D%BF)
-      - [3.4.1.1. 烧录第一块板子](#3411-%E7%83%A7%E5%BD%95%E7%AC%AC%E4%B8%80%E5%9D%97%E6%9D%BF%E5%AD%90)
-      - [3.4.1.2. 烧录第二块板子](#3412-%E7%83%A7%E5%BD%95%E7%AC%AC%E4%BA%8C%E5%9D%97%E6%9D%BF%E5%AD%90)
-    - [3.4.2. 显示效果](#342-%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C)
-- [4. nRF52上的BLE Mesh](#4-nRF52%E4%B8%8A%E7%9A%84BLE-Mesh)
-  - [4.1. 相关慨念](#41-%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
-    - [4.1.1. BLE Mesh相关慨念](#411-BLE-Mesh%E7%9B%B8%E5%85%B3%E6%85%A8%E5%BF%B5)
-    - [4.1.2. nRF52 for Mesh体系结构](#412-nRF52-for-Mesh%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
-  - [4.2. 实战体验：nRF52上运行一个BLE Mesh的例子](#42-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8CnRF52%E4%B8%8A%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AABLE-Mesh%E7%9A%84%E4%BE%8B%E5%AD%90)
-    - [4.2.1. 硬件要求](#421-%E7%A1%AC%E4%BB%B6%E8%A6%81%E6%B1%82)
-    - [4.2.2. 软件要求](#422-%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82)
-    - [4.2.3. 操作步骤](#423-%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4)
-      - [4.2.3.1. nRF Mesh手机软件安装](#4231-nRF-Mesh%E6%89%8B%E6%9C%BA%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85)
-      - [4.2.3.2. nRF52烧录Client和Server应用](#4232-nRF52%E7%83%A7%E5%BD%95Client%E5%92%8CServer%E5%BA%94%E7%94%A8)
-      - [4.2.3.3. nRF Mesh App配置节点](#4233-nRF-Mesh-App%E9%85%8D%E7%BD%AE%E8%8A%82%E7%82%B9)
-    - [4.2.4. 显示效果](#424-%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C)
-- [5. ndn-lite学习与使用](#5-ndn-lite%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8)
-  - [5.1. ndn-lite体系结构](#51-ndn-lite%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
-  - [5.2. ndn-lite库的代码结构](#52-ndn-lite%E5%BA%93%E7%9A%84%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
-  - [5.3. 实战体验：含有信任策略切换功能的ndn-lite例子](#53-%E5%AE%9E%E6%88%98%E4%BD%93%E9%AA%8C%E5%90%AB%E6%9C%89%E4%BF%A1%E4%BB%BB%E7%AD%96%E7%95%A5%E5%88%87%E6%8D%A2%E5%8A%9F%E8%83%BD%E7%9A%84ndn-lite%E4%BE%8B%E5%AD%90)
-    - [5.3.1. 需求](#531-%E9%9C%80%E6%B1%82)
-    - [5.3.2. 效果](#532-%E6%95%88%E6%9E%9C)
-      - [5.3.2.1. 板子上电](#5321-%E6%9D%BF%E5%AD%90%E4%B8%8A%E7%94%B5)
-      - [5.3.2.2. sign on](#5322-sign-on)
-      - [5.3.2.3. 按下板子的Button1](#5323-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90%E7%9A%84Button1)
-      - [5.3.2.4. 按下板子Button2](#5324-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90Button2)
-      - [5.3.2.5. 按下板子Button3](#5325-%E6%8C%89%E4%B8%8B%E6%9D%BF%E5%AD%90Button3)
-      - [5.3.2.6. App上的LED开关按钮](#5326-App%E4%B8%8A%E7%9A%84LED%E5%BC%80%E5%85%B3%E6%8C%89%E9%92%AE)
-      - [5.3.2.7. App上的"Only Controller"和"All node"的选择](#5327-App%E4%B8%8A%E7%9A%84%22Only-Controller%22%E5%92%8C%22All-node%22%E7%9A%84%E9%80%89%E6%8B%A9)
-    - [5.3.3. 下载Android源代码](#533-%E4%B8%8B%E8%BD%BDAndroid%E6%BA%90%E4%BB%A3%E7%A0%81)
-    - [5.3.4. 修改nRF52840源代码](#534-%E4%BF%AE%E6%94%B9nRF52840%E6%BA%90%E4%BB%A3%E7%A0%81)
-      - [5.3.4.1. 添加开关灯的代码](#5341-%E6%B7%BB%E5%8A%A0%E5%BC%80%E5%85%B3%E7%81%AF%E7%9A%84%E4%BB%A3%E7%A0%81)
-      - [5.3.4.2. 修改on_CMDInterest代码](#5342-%E4%BF%AE%E6%94%B9onCMDInterest%E4%BB%A3%E7%A0%81)
-
-<!-- /TOC -->
+<!-- TOC -->autoauto- [1. 初识ndn-lite](#1-初识ndn-lite)auto- [2. 前期准备：开发环境的搭建](#2-前期准备开发环境的搭建)auto    - [2.1. JDK和JRE的安装](#21-jdk和jre的安装)auto        - [2.1.1. 下载JDK](#211-下载jdk)auto        - [2.1.2. 设置环境变量](#212-设置环境变量)auto    - [2.2. Android Studio的安装配置](#22-android-studio的安装配置)auto        - [2.2.1. 下载AS和安装](#221-下载as和安装)auto        - [2.2.2. AS运行和配置](#222-as运行和配置)auto    - [2.3. Segger安装和配置](#23-segger安装和配置)auto        - [2.3.1. 下载和安装SES](#231-下载和安装ses)auto        - [2.3.2. 下载nRF5_SDK](#232-下载nrf5_sdk)auto        - [2.3.3. 下载nRF5命令行工具](#233-下载nrf5命令行工具)auto        - [2.3.4. 测试是否成功](#234-测试是否成功)auto    - [2.4. 初识nRF52840板子](#24-初识nrf52840板子)auto- [3. 实战体验：一个使用ndn-lite的应用示例](#3-实战体验一个使用ndn-lite的应用示例)auto    - [3.1. 需求介绍](#31-需求介绍)auto    - [3.2. Andorid应用程序](#32-andorid应用程序)auto        - [3.2.1. 下载NDN-IoT-Android库](#321-下载ndn-iot-android库)auto        - [3.2.2. 用Android Studio去打开这个Project](#322-用android-studio去打开这个project)auto        - [3.2.3. 编译运行App](#323-编译运行app)auto    - [3.3. nRF52840开发板程序](#33-nrf52840开发板程序)auto        - [3.3.1. 下载nRFProject到本地](#331-下载nrfproject到本地)auto        - [3.3.2. 修改nRFProject中的SDK和ndn-lite路径](#332-修改nrfproject中的sdk和ndn-lite路径)auto        - [3.3.3. Build编译nRF52Project](#333-build编译nrf52project)auto            - [3.3.3.1. 找不到micro_ecc_lib_nrf52.a文件？](#3331-找不到micro_ecc_lib_nrf52a文件)auto    - [3.4. 实现效果](#34-实现效果)auto        - [3.4.1. 将nRFProject分别烧录到nRF52840板](#341-将nrfproject分别烧录到nrf52840板)auto            - [3.4.1.1. 烧录第一块板子](#3411-烧录第一块板子)auto            - [3.4.1.2. 烧录第二块板子](#3412-烧录第二块板子)auto        - [3.4.2. 显示效果](#342-显示效果)auto- [4. nRF52上的BLE Mesh](#4-nrf52上的ble-mesh)auto    - [4.1. 相关慨念](#41-相关慨念)auto        - [4.1.1. BLE Mesh相关慨念](#411-ble-mesh相关慨念)auto        - [4.1.2. nRF52 for Mesh体系结构](#412-nrf52-for-mesh体系结构)auto    - [4.2. 实战体验：nRF52上运行一个BLE Mesh的例子](#42-实战体验nrf52上运行一个ble-mesh的例子)auto        - [4.2.1. 硬件要求](#421-硬件要求)auto        - [4.2.2. 软件要求](#422-软件要求)auto        - [4.2.3. 操作步骤](#423-操作步骤)auto            - [4.2.3.1. nRF Mesh手机软件安装](#4231-nrf-mesh手机软件安装)auto            - [4.2.3.2. nRF52烧录Client和Server应用](#4232-nrf52烧录client和server应用)auto            - [4.2.3.3. nRF Mesh App配置节点](#4233-nrf-mesh-app配置节点)auto        - [4.2.4. 显示效果](#424-显示效果)auto- [5. ndn-lite学习与使用](#5-ndn-lite学习与使用)auto    - [5.1. ndn-lite体系结构](#51-ndn-lite体系结构)auto    - [5.2. ndn-lite库的代码结构](#52-ndn-lite库的代码结构)auto    - [5.3. 实战体验：含有信任策略切换功能的ndn-lite例子](#53-实战体验含有信任策略切换功能的ndn-lite例子)auto        - [5.3.1. 需求](#531-需求)auto        - [5.3.2. 效果](#532-效果)auto            - [5.3.2.1. 板子上电](#5321-板子上电)auto            - [5.3.2.2. sign on](#5322-sign-on)auto            - [5.3.2.3. 按下板子的Button1](#5323-按下板子的button1)auto            - [5.3.2.4. 按下板子Button2](#5324-按下板子button2)auto            - [5.3.2.5. 按下板子Button3](#5325-按下板子button3)auto            - [5.3.2.6. App上的LED开关按钮](#5326-app上的led开关按钮)auto            - [5.3.2.7. App上的"Only Controller"和"All node"的选择](#5327-app上的only-controller和all-node的选择)auto        - [5.3.3. 下载Android源代码](#533-下载android源代码)auto        - [5.3.4. 修改nRF52840源代码](#534-修改nrf52840源代码)auto            - [5.3.4.1. 添加开关灯的代码](#5341-添加开关灯的代码)auto            - [5.3.4.2. 修改on_CMDInterest代码](#5342-修改on_cmdinterest代码)autoauto<!-- /TOC -->
   
 # 1. 初识ndn-lite
   
@@ -693,7 +631,7 @@ ndn-lite系统结构图如下：
 
 这个App源代码下载地址为：https://github.com/ZoharAndroid/ndn-lite-ble.git 。该库中的`/ndn-lite-ble-android`目录就是这个实例的android的源代码程序。
 
-然后用Android Studio导入这个ndn-lite-ble-android工程。然后编译运行安装到手机上。具体操作在前面章节已经说过，可以参考前面的章节的内容。
+然后用Android Studio导入这个ndn-lite-ble-android工程，操作步骤为：`File -> Open `。然后编译运行安装到手机上。如果遇到需要安装相应sdk版本，按照AS提示进行安装即可。具体操作在前面章节已经说过，可以参考前面的章节的内容。
 
 当然，这个App还有未完成的功能，后续会继续添加。其中，如果遇到Bug，还请把情况反馈给我（Email：1048132071@qq.com或者github上的issues）。
 
