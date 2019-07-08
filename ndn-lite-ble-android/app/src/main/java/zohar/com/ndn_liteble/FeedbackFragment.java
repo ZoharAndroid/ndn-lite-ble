@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 public class FeedbackFragment extends Fragment {
 
+    public static FeedbackFragment newInstance (){
+        FeedbackFragment feedbackFragment = new FeedbackFragment();
+        return feedbackFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

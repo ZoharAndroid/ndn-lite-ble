@@ -2,6 +2,7 @@ package zohar.com.ndn_liteble;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -108,6 +109,14 @@ public class DeviceFragment extends Fragment {
     // 板子的数量
     private List<Board> boards = new ArrayList<>();
     private BoardAdapter boardAdapter;
+
+    public static DeviceFragment newInstance(){
+        Bundle bundle = new Bundle();
+        DeviceFragment deviceFragment = new DeviceFragment();
+        deviceFragment.setArguments(bundle);
+        return deviceFragment;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

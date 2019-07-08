@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 public class SettingsFragment extends Fragment {
 
+    public static SettingsFragment newInstance(){
+        SettingsFragment settingsFragment = new SettingsFragment();
+        return settingsFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

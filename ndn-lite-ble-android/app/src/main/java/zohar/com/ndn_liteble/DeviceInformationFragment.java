@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 public class DeviceInformationFragment extends Fragment {
 
+    public static DeviceInformationFragment newInstance(){
+        DeviceInformationFragment deviceInformationFragment = new DeviceInformationFragment();
+        return deviceInformationFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

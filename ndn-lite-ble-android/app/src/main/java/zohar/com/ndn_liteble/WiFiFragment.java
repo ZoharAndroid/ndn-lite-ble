@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 public class WiFiFragment extends Fragment {
 
+    public static WiFiFragment newInstance() {
+        WiFiFragment wiFiFragment = new WiFiFragment();
+        return wiFiFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

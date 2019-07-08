@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 public class ShareFragment extends Fragment {
 
+    public static ShareFragment newInstance() {
+        ShareFragment shareFragment = new ShareFragment();
+        return shareFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
