@@ -110,6 +110,11 @@ public class DeviceFragment extends Fragment {
     private List<Board> boards = new ArrayList<>();
     private BoardAdapter boardAdapter;
 
+    /**
+     * 通过这个方法，可以传递参数到Fragment
+     *
+     * @return
+     */
     public static DeviceFragment newInstance(){
         Bundle bundle = new Bundle();
         DeviceFragment deviceFragment = new DeviceFragment();
@@ -632,9 +637,12 @@ public class DeviceFragment extends Fragment {
                 requestCameraPermission();
                 break;
             case R.id.toolbar_refresh: // 刷新
-//                boards.clear();
-//                mRecycleNode.setVisibility(View.GONE);
-//                ndnLiteMainMethod();
+                BLEUnicastConnectionMaintainer.getInstance().initialize(getActivity());
+                boards.clear();
+                boardAdapter.notifyDataSetChanged();
+                mRecycleNode.setVisibility(View.GONE);
+                // 重新调用ndn-lite主方法
+                ndnLiteMainMethod();
                 Toast.makeText(getContext(),"Todo：刷新", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
