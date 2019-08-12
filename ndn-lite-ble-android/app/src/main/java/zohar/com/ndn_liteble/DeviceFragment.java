@@ -478,8 +478,10 @@ public class DeviceFragment extends Fragment {
                 Name commandInterest;
                 if (currentBoardId == 1){
                     SendInterestTaskV2 sendInterestTaskV2;
-                    if (isChecked){ // 当前状态时关闭，那么就要发送开启的命令
+                    if (isChecked){
+                        // create interest name
                         commandInterest = new Name("/NDN-IoT/Board1/LED/ON");
+                        // create a thread and execute it to send interest
                         sendInterestTaskV2 = new SendInterestTaskV2();
                         sendInterestTaskV2.execute(commandInterest);
                     }else{
@@ -491,6 +493,7 @@ public class DeviceFragment extends Fragment {
                 if (currentBoardId == 2) {
                     SendInterestTaskV3 sendInterestTaskV3;
                     if (isChecked) {
+                        // board2 as above
                         commandInterest = new Name("/NDN-IoT/Board2/LED/ON");
                          sendInterestTaskV3 = new SendInterestTaskV3();
                         sendInterestTaskV3.execute(commandInterest);
@@ -748,7 +751,6 @@ public class DeviceFragment extends Fragment {
         protected Boolean doInBackground(Name... names) {
             Log.i(TAG, "SendInterestTaskV2 : doInBackground, names: " + names[0]);
 
-            // 回来的数据包
             IncomingData incomingData = new IncomingData();
 
             Interest pendingInterest = new Interest(names[0]);
