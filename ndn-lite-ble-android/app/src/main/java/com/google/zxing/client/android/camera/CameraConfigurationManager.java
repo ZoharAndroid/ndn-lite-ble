@@ -139,8 +139,10 @@ final class CameraConfigurationManager {
   }
 
   void setDesiredCameraParameters(OpenCamera camera, boolean safeMode) {
-
     Camera theCamera = camera.getCamera();
+    // 这里设置成90度
+    theCamera.setDisplayOrientation(90);
+
     Camera.Parameters parameters = theCamera.getParameters();
 
     if (parameters == null) {

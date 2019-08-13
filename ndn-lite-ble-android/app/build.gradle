@@ -39,5 +39,5 @@ dependencies {
     implementation project(':ndn_lite_support_library')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'net.named-data:jndn-android:0.22'
-
+    /*添加依赖*/
 }

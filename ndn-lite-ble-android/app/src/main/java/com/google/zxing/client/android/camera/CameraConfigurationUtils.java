@@ -290,9 +290,18 @@ public final class CameraConfigurationUtils {
       Log.i(TAG, "Supported preview sizes: " + previewSizesString);
     }
 
-    double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
+    // double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
 
-    // Find a suitable size, with max resolution
+    // 添加横竖屏代码
+    double screenAspectRatio;
+    if (screenResolution.x < screenResolution.y) { // 竖屏
+      screenAspectRatio = (double) screenResolution.y / (double) screenResolution.x;
+    } else {
+      screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
+    }
+
+
+      // Find a suitable size, with max resolution
     int maxResolution = 0;
     Camera.Size maxResPreviewSize = null;
     for (Camera.Size size : rawSupportedSizes) {
@@ -312,6 +321,7 @@ public final class CameraConfigurationUtils {
         continue;
       }
 
+      // 删除低分辨率的代码
       if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
         Point exactPoint = new Point(realWidth, realHeight);
         Log.i(TAG, "Found preview size exactly matching screen size: " + exactPoint);
