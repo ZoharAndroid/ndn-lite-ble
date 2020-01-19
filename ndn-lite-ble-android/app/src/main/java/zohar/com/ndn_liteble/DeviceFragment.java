@@ -2,13 +2,11 @@ package zohar.com.ndn_liteble;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +15,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,9 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +56,6 @@ import NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerResu
 import zohar.com.ndn_liteble.adapter.BoardAdapter;
 import zohar.com.ndn_liteble.model.Board;
 import zohar.com.ndn_liteble.utils.Constant;
-import zohar.com.ndn_liteble.utils.SendInterestTaskV2;
 
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.SignOnControllerConsts.KD_PUB_CERTIFICATE_NAME_PREFIX;
 import static NDNLiteSupport.SignOnBasicControllerBLE.secureSignOn.secureSignOnVariants.SecureSignOnVariantStrings.SIGN_ON_VARIANT_BASIC_ECC_256;
@@ -86,6 +80,27 @@ public class DeviceFragment extends Fragment {
     // ProgressBar显示匹配节点的界面
     private ConstraintLayout mLoadingView;
 
+    // alice board
+    private ConstraintLayout mAliceView;
+    private LinearLayout mAliceOfflineView;
+    private LinearLayout mAliceOnlineView;
+    private ImageView mAliceBoardImage;
+    private TextView mAliceKDPub;
+    private TextView mAliceIdentifier;
+    private TextView mAliceMacaddress;
+    private RadioGroup mAliceRadioGroup;
+
+    // alice board
+    private ConstraintLayout mBobView;
+    private LinearLayout mBobOfflineView;
+    private LinearLayout mBobOnlineView;
+    private ImageView mBobBoardImage;
+    private TextView mBobKDPub;
+    private TextView mBobIdentifier;
+    private TextView mBobMacaddress;
+    private RadioGroup mBobRadioGroup;
+
+
     // 蓝牙状态的监听
     private BluetoothListenerRecevier mBluetoothRecevier;
     // BLEUnicastConnectionMaintainer
@@ -109,6 +124,8 @@ public class DeviceFragment extends Fragment {
     // 板子的数量
     private List<Board> boards = new ArrayList<>();
     private BoardAdapter boardAdapter;
+
+
 
     /**
      * 通过这个方法，可以传递参数到Fragment
@@ -227,8 +244,8 @@ public class DeviceFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            boardAdapter.notifyItemInserted(boards.size() - 1); // 刷新recyclerview要显示的位置
-                            mRecycleNode.scrollToPosition(boards.size() - 1); // 将recyclerview定位到最后一个位置
+                           // boardAdapter.notifyItemInserted(boards.size() - 1); // 刷新recyclerview要显示的位置
+                          //  mRecycleNode.scrollToPosition(boards.size() - 1); // 将recyclerview定位到最后一个位置
                         }
                     });
                 }
@@ -250,7 +267,7 @@ public class DeviceFragment extends Fragment {
                     @Override
                     public void run() {
                         showLoadingView(false);
-                        mRecycleNode.setVisibility(View.VISIBLE);
+                       // mRecycleNode.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -350,161 +367,161 @@ public class DeviceFragment extends Fragment {
         mFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "悬浮点击按钮", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(), "悬浮点击按钮", Toast.LENGTH_SHORT).show();
             }
         });
 
         // RadioGroup选择
-        boardAdapter.setOnCheckedChangeListener(new BoardAdapter.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId, int position) {
-
-                // 获取当前点击的实例
-                int currentBoardId;
-                Board board = boards.get(position);
-                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
-                    currentBoardId = 1;
-                } else {
-                    currentBoardId = 2;
-                }
-                Log.i(TAG, "当前板子的id" + currentBoardId);
-                switch (checkedId) {
-                    case R.id.rb_only_controller: // 只能控制自己
-                        Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
-                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
-                        if (currentBoardId == 1) {
-                            // 第一块板子
-                            SendInterestTaskV2 SITask = new SendInterestTaskV2();
-                            SITask.execute(commandInterest1); // 开启子线程发送兴趣包
-                        } else if (currentBoardId == 2) {
-                            // 第二块板子
-                            SendInterestTaskV3 SITask = new SendInterestTaskV3();
-                            SITask.execute(commandInterest1);
-                        }
-                        Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.rb_all_node: // 能相互控制
-                        Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
-                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
-                        if (currentBoardId == 1) {
-                            SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
-                            SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
-                        } else if (currentBoardId == 2) {
-                            SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
-                            SITask2.execute(commandInterest2);
-                        }
-                        Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                }
-            }
-        });
-
-        //板子点击的图片
-        boardAdapter.setOnClickBoardImageListener(new BoardAdapter.OnClickBoardImageListener() {
-            @Override
-            public void onClickBoardImageListener(View v, final Board board) {
-                // 创建popup menu
-                final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                // 添加布局
-                popupMenu.getMenuInflater().inflate(R.menu.menu_police_select, popupMenu.getMenu());
-                // 注册点击事件
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-
-                        // 获取当前点击的实例
-                        int currentBoardId;
-
-                        if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
-                            currentBoardId = 1;
-                        } else {
-                            currentBoardId = 2;
-                        }
-                        Log.i(TAG, "当前板子的id" + currentBoardId);
-                        switch (item.getItemId()) {
-                            case R.id.only_controller: // 只能控制自己
-                                Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
-                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
-                                if (currentBoardId == 1) {
-                                    // 第一块板子
-                                    SendInterestTaskV2 SITask = new SendInterestTaskV2();
-                                    SITask.execute(commandInterest1); // 开启子线程发送兴趣包
-                                } else if (currentBoardId == 2) {
-                                    // 第二块板子
-                                    SendInterestTaskV3 SITask = new SendInterestTaskV3();
-                                    SITask.execute(commandInterest1);
-                                }
-                                Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
-                                break;
-                            case R.id.all_node: // 能相互控制
-                                Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
-                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
-                                if (currentBoardId == 1) {
-                                    SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
-                                    SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
-                                } else if (currentBoardId == 2) {
-                                    SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
-                                    SITask2.execute(commandInterest2);
-                                }
-                                Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
-                                break;
-                            default:
-                        }
-
-
-                        return false;
-                    }
-                });
-                // 显示popup menu
-                popupMenu.show();
-            }
-        });
+//        boardAdapter.setOnCheckedChangeListener(new BoardAdapter.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, int checkedId, int position) {
+//
+//                // 获取当前点击的实例
+//                int currentBoardId;
+//                Board board = boards.get(position);
+//                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
+//                    currentBoardId = 1;
+//                } else {
+//                    currentBoardId = 2;
+//                }
+//                Log.i(TAG, "当前板子的id" + currentBoardId);
+//                switch (checkedId) {
+//                    case R.id.rb_only_controller: // 只能控制自己
+//                        Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
+//                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
+//                        if (currentBoardId == 1) {
+//                            // 第一块板子
+//                            SendInterestTaskV2 SITask = new SendInterestTaskV2();
+//                            SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+//                        } else if (currentBoardId == 2) {
+//                            // 第二块板子
+//                            SendInterestTaskV3 SITask = new SendInterestTaskV3();
+//                            SITask.execute(commandInterest1);
+//                        }
+//                        Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case R.id.rb_all_node: // 能相互控制
+//                        Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
+//                        Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
+//                        if (currentBoardId == 1) {
+//                            SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
+//                            SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+//                        } else if (currentBoardId == 2) {
+//                            SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
+//                            SITask2.execute(commandInterest2);
+//                        }
+//                        Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    default:
+//                }
+//            }
+//        });
+//
+//        //板子点击的图片
+//        boardAdapter.setOnClickBoardImageListener(new BoardAdapter.OnClickBoardImageListener() {
+//            @Override
+//            public void onClickBoardImageListener(View v, final Board board) {
+//                // 创建popup menu
+//                final PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+//                // 添加布局
+//                popupMenu.getMenuInflater().inflate(R.menu.menu_police_select, popupMenu.getMenu());
+//                // 注册点击事件
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//
+//                        // 获取当前点击的实例
+//                        int currentBoardId;
+//
+//                        if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
+//                            currentBoardId = 1;
+//                        } else {
+//                            currentBoardId = 2;
+//                        }
+//                        Log.i(TAG, "当前板子的id" + currentBoardId);
+//                        switch (item.getItemId()) {
+//                            case R.id.only_controller: // 只能控制自己
+//                                Name commandInterest1 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/ControllerOnly");
+//                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest1.toString());
+//                                if (currentBoardId == 1) {
+//                                    // 第一块板子
+//                                    SendInterestTaskV2 SITask = new SendInterestTaskV2();
+//                                    SITask.execute(commandInterest1); // 开启子线程发送兴趣包
+//                                } else if (currentBoardId == 2) {
+//                                    // 第二块板子
+//                                    SendInterestTaskV3 SITask = new SendInterestTaskV3();
+//                                    SITask.execute(commandInterest1);
+//                                }
+//                                Toast.makeText(getContext(), "开始转变策略：Controller", Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case R.id.all_node: // 能相互控制
+//                                Name commandInterest2 = new Name("/NDN-IoT/TrustChange/Board" + currentBoardId + "/AllNode");
+//                                Log.i(TAG, "onMenuItemClick: constructed name is:" + commandInterest2.toString());
+//                                if (currentBoardId == 1) {
+//                                    SendInterestTaskV2 SITask2 = new SendInterestTaskV2();
+//                                    SITask2.execute(commandInterest2); // 开启子线程发送兴趣包
+//                                } else if (currentBoardId == 2) {
+//                                    SendInterestTaskV3 SITask2 = new SendInterestTaskV3();
+//                                    SITask2.execute(commandInterest2);
+//                                }
+//                                Toast.makeText(getContext(), "开始转变策略：All node", Toast.LENGTH_SHORT).show();
+//                                break;
+//                            default:
+//                        }
+//
+//
+//                        return false;
+//                    }
+//                });
+//                // 显示popup menu
+//                popupMenu.show();
+//            }
+//        });
 
         // switch事件
-        boardAdapter.setOnClickSwitchListener(new BoardAdapter.OnClickSwitchListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int position) {
-                Board board = boards.get(position);
-                // 获取当前点击的实例
-                int currentBoardId;
-
-                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
-                    currentBoardId = 1;
-                } else {
-                    currentBoardId = 2;
-                }
-                Log.i(TAG, "当前板子的id：" + currentBoardId);
-                Name commandInterest;
-                if (currentBoardId == 1){
-                    SendInterestTaskV2 sendInterestTaskV2;
-                    if (isChecked){
-                        // create interest name
-                        commandInterest = new Name("/NDN-IoT/Board1/LED/ON");
-                        // create a thread and execute it to send interest
-                        sendInterestTaskV2 = new SendInterestTaskV2();
-                        sendInterestTaskV2.execute(commandInterest);
-                    }else{
-                        commandInterest = new Name("/NDN-IoT/Board1/LED/OFF");
-                        sendInterestTaskV2 = new SendInterestTaskV2();
-                        sendInterestTaskV2.execute(commandInterest);
-                    }
-                }
-                if (currentBoardId == 2) {
-                    SendInterestTaskV3 sendInterestTaskV3;
-                    if (isChecked) {
-                        // board2 as above
-                        commandInterest = new Name("/NDN-IoT/Board2/LED/ON");
-                         sendInterestTaskV3 = new SendInterestTaskV3();
-                        sendInterestTaskV3.execute(commandInterest);
-                    }else{
-                        commandInterest = new Name("/NDN-IoT/Board2/LED/OFF");
-                        sendInterestTaskV3 = new SendInterestTaskV3();
-                        sendInterestTaskV3.execute(commandInterest);
-                    }
-                }
-            }
-        });
+//        boardAdapter.setOnClickSwitchListener(new BoardAdapter.OnClickSwitchListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked, int position) {
+//                Board board = boards.get(position);
+//                // 获取当前点击的实例
+//                int currentBoardId;
+//
+//                if (board.getIdentifierHex().equals(m_expectedDeviceIdentifierHexString)) {
+//                    currentBoardId = 1;
+//                } else {
+//                    currentBoardId = 2;
+//                }
+//                Log.i(TAG, "当前板子的id：" + currentBoardId);
+//                Name commandInterest;
+//                if (currentBoardId == 1){
+//                    SendInterestTaskV2 sendInterestTaskV2;
+//                    if (isChecked){
+//                        // create interest name
+//                        commandInterest = new Name("/NDN-IoT/Board1/LED/ON");
+//                        // create a thread and execute it to send interest
+//                        sendInterestTaskV2 = new SendInterestTaskV2();
+//                        sendInterestTaskV2.execute(commandInterest);
+//                    }else{
+//                        commandInterest = new Name("/NDN-IoT/Board1/LED/OFF");
+//                        sendInterestTaskV2 = new SendInterestTaskV2();
+//                        sendInterestTaskV2.execute(commandInterest);
+//                    }
+//                }
+//                if (currentBoardId == 2) {
+//                    SendInterestTaskV3 sendInterestTaskV3;
+//                    if (isChecked) {
+//                        // board2 as above
+//                        commandInterest = new Name("/NDN-IoT/Board2/LED/ON");
+//                         sendInterestTaskV3 = new SendInterestTaskV3();
+//                        sendInterestTaskV3.execute(commandInterest);
+//                    }else{
+//                        commandInterest = new Name("/NDN-IoT/Board2/LED/OFF");
+//                        sendInterestTaskV3 = new SendInterestTaskV3();
+//                        sendInterestTaskV3.execute(commandInterest);
+//                    }
+//                }
+//            }
+//        });
 
     }
 
@@ -512,19 +529,38 @@ public class DeviceFragment extends Fragment {
      * 初始化UI控件
      */
     private void initUIView() {
+        mAliceView = view.findViewById(R.id.alice);
+        mAliceOfflineView = view.findViewById(R.id.off_line_container_alice);
+        mAliceOnlineView = view.findViewById(R.id.on_line_container_alice);
+        mAliceBoardImage = view.findViewById(R.id.iv_board_alice);
+        mAliceMacaddress = view.findViewById(R.id.tv_mac_address_alice);
+        mAliceIdentifier = view.findViewById(R.id.tv_identifier_alice);
+        mAliceKDPub = view.findViewById(R.id.tv_kdpub_alice);
+        mAliceRadioGroup = view.findViewById(R.id.rg_policy_select_alice);
+
+
+        mBobView = view.findViewById(R.id.bob);
+        mBobOfflineView = view.findViewById(R.id.off_line_container_bob);
+        mBobOnlineView = view.findViewById(R.id.on_line_container_bob);
+        mBobBoardImage = view.findViewById(R.id.iv_board_bob);
+        mBobMacaddress = view.findViewById(R.id.tv_mac_address_bob);
+        mBobIdentifier = view.findViewById(R.id.tv_identifier_bob);
+        mBobKDPub = view.findViewById(R.id.tv_kdpub_bob);
+        mBobRadioGroup = view.findViewById(R.id.rg_policy_select_bob);
+
         mLoadingView = view.findViewById(R.id.cl_loading_device);
         mBleView = view.findViewById(R.id.ble_check_constraint);
         mStartBleButton = view.findViewById(R.id.btn_ble_open_main);
-        mFloatingButton = view.findViewById(R.id.floating_button_main_activity);
+        //mFloatingButton = view.findViewById(R.id.floating_button_main_activity);
         mTvBle = view.findViewById(R.id.tv_bluetooth_disable);
         mTvBleNote = view.findViewById(R.id.tv_bluetooth_disable_note);
-        mRecycleNode = view.findViewById(R.id.recycle_show_node_device);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayout.VERTICAL);
-        mRecycleNode.setLayoutManager(layoutManager);
-        mRecycleNode.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        boardAdapter = new BoardAdapter(boards);
-        mRecycleNode.setAdapter(boardAdapter);
+//        mRecycleNode = view.findViewById(R.id.recycle_show_node_device);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayout.VERTICAL);
+//        mRecycleNode.setLayoutManager(layoutManager);
+//        mRecycleNode.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+//        boardAdapter = new BoardAdapter(boards);
+//        mRecycleNode.setAdapter(boardAdapter);
 
     }
 
@@ -640,13 +676,13 @@ public class DeviceFragment extends Fragment {
                 requestCameraPermission();
                 break;
             case R.id.toolbar_refresh: // 刷新
-                BLEUnicastConnectionMaintainer.getInstance().initialize(getActivity());
-                boards.clear();
-                boardAdapter.notifyDataSetChanged();
-                mRecycleNode.setVisibility(View.GONE);
-                // 重新调用ndn-lite主方法
-                ndnLiteMainMethod();
-                Toast.makeText(getContext(),"Todo：刷新", Toast.LENGTH_SHORT).show();
+//                BLEUnicastConnectionMaintainer.getInstance().initialize(getActivity());
+//                boards.clear();
+//               // boardAdapter.notifyDataSetChanged();
+//                mRecycleNode.setVisibility(View.GONE);
+//                // 重新调用ndn-lite主方法
+//                ndnLiteMainMethod();
+//                Toast.makeText(getContext(),"Todo：刷新", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.create_qr_toolbar: // 创建二维码
                 startCreateQRActivity();
@@ -672,7 +708,12 @@ public class DeviceFragment extends Fragment {
                 if (resultCode == getActivity().RESULT_OK) {
                     Log.i(TAG, "相加开启成功！");
                     String qrResult = data.getStringExtra(Constant.QR_RESULT);
-                    Toast.makeText(getContext(), qrResult, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), qrResult, Toast.LENGTH_SHORT).show();
+                    if (qrResult.equals(m_expectedDeviceIdentifierHexString)){
+                        mAliceView.setVisibility(View.VISIBLE);
+                    }else if (qrResult.equals(m_expectedDeviceIdentifierHexString2)){
+                        mBobView.setVisibility(View.VISIBLE);
+                    }
                 }
                 break;
             default:

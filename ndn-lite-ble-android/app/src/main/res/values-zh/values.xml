@@ -144,4 +144,14 @@
     <string name="sbc_name">Google 图书搜索</string>
     <string name="wifi_changing_network">连接到 Wi-Fi \u2026</string>
 
+    <string name="board1">Alice</string>
+    <string name="board2">Bob</string>
+    <string name="off_line">Off-line</string>
+    <string name="on_line">On-line</string>
+    <string name="mac_address">MAC地址：</string>
+    <string name="identifier">Identifier：</string>
+    <string name="KDPubCertificate">KDPubCertificate：</string>
+    <string name="led_switch">LED开关</string>
+    <string name="only_the_contoller">Only the controller</string>
+    <string name="any_device">Any device</string>
 </resources>
