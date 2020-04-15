@@ -624,11 +624,11 @@ Client和Server烧录到nRF52板子的操作是一样的，所以这里只用Cli
 
 # 5. ndn-lite学习与使用
 
-这部分将会深入去学习ndn-lite相关的内容，对使用ndn-lite打下基础。
+[NDN-LITE理论学习](./res/learn-ndn-lite.md)
 
 ## 5.1. ndn-lite体系结构
   
-ndn-lite的详细介绍请见：https://github.com/named-data-iot/ndn-lite/wiki 。ndn-lite库旨在提供多个核心NDN网络栈。该库允许应用程序直接有访问控制、服务发现、模式化信任等功能。
+ndn-lite库旨在提供多个核心NDN网络栈。该库允许应用程序直接有访问控制、服务发现、模式化信任等功能。
 
 ndn-lite系统结构图如下：
 
